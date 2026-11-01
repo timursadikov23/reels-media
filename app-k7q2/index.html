@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<title>Konveyer</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{--bg:#110E1E;--card:#1B1730;--card2:#231E3D;--line:#2E2850;--txt:#F2F0FA;--dim:#9A93B8;--lime:#C6F432;--cyan:#38E1F0;--gold:#FFC23D;--red:#FF4D6A;--vio:#9B7BFF}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif}
+body{padding:0 0 calc(96px + env(safe-area-inset-bottom))}
+header{padding:16px 16px 8px;position:sticky;top:0;background:linear-gradient(var(--bg) 82%,transparent);z-index:5}
+.top{display:flex;justify-content:space-between;align-items:center}
+h1{font-size:20px;margin:0;font-weight:800;letter-spacing:-.3px}
+h1 b{color:var(--lime)}
+.upd{font-size:11px;color:var(--dim);text-align:right}
+.tabs{display:flex;gap:6px;margin-top:12px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:1 0 auto;padding:8px 10px;border-radius:999px;background:var(--card);color:var(--dim);font-weight:600;font-size:13px;border:1px solid var(--line);text-align:center}
+.tab.on{background:var(--lime);color:#14101F;border-color:var(--lime)}
+.tab i{font-style:normal;background:var(--red);color:#fff;border-radius:999px;padding:0 6px;margin-left:4px;font-size:11px}
+main{padding:4px 16px}
+.kpi{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:6px 0 14px}
+.k{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.k b{display:block;font-size:22px;font-weight:800}
+.k span{font-size:12px;color:var(--dim)}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--dim);margin:18px 0 8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px}
+.card.sel{border-color:var(--lime);box-shadow:0 0 0 1px var(--lime) inset}
+.chip{display:inline-block;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:var(--card2);color:var(--cyan);margin:0 4px 6px 0}
+.chip.g{color:var(--gold)}.chip.l{color:var(--lime)}.chip.r{color:var(--red)}
+.hook{font-size:17px;font-weight:700;line-height:1.3;margin:4px 0 6px}
+.ru{color:var(--dim);font-size:13px;margin-bottom:10px}
+.row{display:flex;gap:8px;font-size:13px;margin:5px 0}
+.row .l{flex:0 0 92px;color:var(--dim)}
+.cover{background:radial-gradient(120% 90% at 50% 100%,#2b2550,#110E1E);border-radius:12px;padding:14px 10px;text-align:center;margin:8px 0 10px;border:1px solid var(--line)}
+.cover .t1{font-weight:900;font-size:18px;letter-spacing:.2px}
+.cover .t2{font-weight:900;font-size:15px;color:var(--lime);margin-top:2px}
+.cover .p{display:inline-block;margin-top:8px;background:var(--lime);color:#14101F;font-weight:800;font-size:11px;padding:4px 10px;border-radius:999px}
+.checks{display:flex;gap:6px;margin:8px 0 2px;flex-wrap:wrap}
+.checks span{font-size:11px;padding:2px 8px;border-radius:6px;background:var(--card2)}
+.checks .ok{color:var(--lime)}.checks .no{color:var(--red)}
+.btns{display:flex;gap:8px;margin-top:10px}
+button{font:inherit;border:0;border-radius:12px;padding:10px 12px;font-weight:700;cursor:pointer}
+.b1{background:var(--lime);color:#14101F;flex:1}
+.b2{background:var(--card2);color:var(--txt);border:1px solid var(--line)}
+.b1.on{background:#3a4a10;color:var(--lime)}
+.task{display:flex;gap:10px;align-items:flex-start}
+.box{flex:0 0 24px;height:24px;border-radius:8px;border:2px solid var(--lime);display:grid;place-items:center;color:#14101F;font-weight:900}
+.box.on{background:var(--lime)}
+.steps{display:flex;gap:3px;margin:8px 0 4px}
+.steps i{flex:1;height:6px;border-radius:3px;background:var(--line)}
+.steps i.on{background:var(--lime)}
+.stage{font-size:12px;font-weight:700;color:var(--lime)}
+.st{display:flex;gap:12px;font-size:13px;margin-top:6px;flex-wrap:wrap}
+.st b{font-size:15px}
+textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:12px;color:var(--txt);font:inherit;padding:10px;min-height:64px;margin-top:8px;resize:vertical}
+.bar{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:12px}
+.bar .n{flex:0 0 112px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--dim)}
+.bar .tr{flex:1;height:14px;background:var(--card2);border-radius:4px;overflow:hidden}
+.bar .tr i{display:block;height:100%;border-radius:4px}
+.bar .v{flex:0 0 74px;text-align:right;font-variant-numeric:tabular-nums}
+ul.rep{margin:0;padding-left:18px}ul.rep li{margin:6px 0;font-size:14px}
+.legend{font-size:11px;color:var(--dim);margin:4px 0 8px}
+.legend b{color:var(--lime)}
+#send{position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));display:none;background:var(--lime);color:#14101F;font-size:16px;padding:15px;border-radius:16px;box-shadow:0 8px 30px #0008;z-index:9}
+.empty{color:var(--dim);font-size:14px;padding:8px 0}
+.note{background:#2a1f12;border:1px solid #5a4318;color:var(--gold);border-radius:12px;padding:10px 12px;font-size:13px;margin:8px 0}
+.hide{display:none}
+</style>
+</head>
+<body>
+<header>
+  <div class="top"><div><h1>Konveyer</h1><div style="font-size:12px;color:var(--dim)">@sadikovtimur_ · oddiy tilda — texnologiya</div></div><div class="upd" id="upd"></div></div>
+  <div class="tabs" id="tabs"></div>
+</header>
+<main id="main"><div class="empty">Загрузка…</div></main>
+<button id="send"></button>
+<script>
+const tg = window.Telegram && Telegram.WebApp; if (tg) { tg.ready(); tg.expand(); try{tg.setHeaderColor('#110E1E');tg.setBackgroundColor('#110E1E')}catch(e){} }
+let D = null, TAB = 'today', Q = [];   // Q = queued actions, sent together
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt = n => (n ?? 0).toLocaleString('ru-RU');
+const has = (k, id) => Q.some(a => a[0] === k && a[1] === id);
+function toggle(k, id, extra) {
+  const i = Q.findIndex(a => a[0] === k && a[1] === id);
+  if (i >= 0) Q.splice(i, 1); else { if (k === 'pick') Q = Q.filter(a => !(a[0] === 'reject' && a[1] === id)); if (k === 'reject') Q = Q.filter(a => !(a[0] === 'pick' && a[1] === id)); Q.push(extra ? [k, id, extra] : [k, id]); }
+  try { tg && tg.HapticFeedback.selectionChanged() } catch (e) {}
+  render();
+}
+function sendAll() {
+  if (!Q.length) return;
+  const data = JSON.stringify({a: Q});
+  // sendData works only when opened via the reply-keyboard button (no query_id); menu/inline launches -> copy fallback
+  try { if (!tg || tg.platform === 'unknown' || (tg.initDataUnsafe && tg.initDataUnsafe.query_id)) throw 0; tg.sendData(data); }
+  catch (e) {
+    const box = document.getElementById('main');
+    box.insertAdjacentHTML('afterbegin', `<div class="note">Открой приложение кнопкой «📱 Konveyer» под полем ввода в боте — тогда выбор отправится сам. Или скопируй и отправь боту этот текст:<textarea readonly>${esc(data)}</textarea></div>`);
+    window.scrollTo(0, 0);
+  }
+}
+function sendBtn() {
+  const n = Q.length, b = document.getElementById('send');
+  if (tg && tg.MainButton && tg.platform !== 'unknown') {
+    if (n) { tg.MainButton.setParams({text: `Отправить (${n})`, color: '#C6F432', text_color: '#14101F'}); tg.MainButton.show(); } else tg.MainButton.hide();
+    b.style.display = 'none';
+  } else { b.textContent = `Отправить (${n})`; b.style.display = n ? 'block' : 'none'; }
+}
+if (tg && tg.MainButton) tg.MainButton.onClick(sendAll);
+document.getElementById('send').onclick = sendAll;
+
+function tabs() {
+  const t = [['today', 'Сегодня', D.tasks.length], ['topics', 'Темы', D.topics.filter(x => !x.picked).length], ['videos', 'Видео', D.kpi.to_post], ['stats', 'Отчёт', 0]];
+  document.getElementById('tabs').innerHTML = t.map(([k, n, c]) => `<div class="tab ${TAB === k ? 'on' : ''}" onclick="TAB='${k}';render();window.scrollTo(0,0)">${n}${c ? `<i>${c}</i>` : ''}</div>`).join('');
+}
+function kpi() {
+  const k = D.kpi;
+  return `<div class="kpi"><div class="k"><b>${fmt(k.week_views)}</b><span>просмотров · ролики за 7 дней</span></div><div class="k"><b>${fmt(k.week_shares)}</b><span>пересылок · ролики за 7 дней</span></div>
+  <div class="k"><b style="color:var(--gold)">${k.to_post}</b><span>выложить сейчас</span></div><div class="k"><b style="color:var(--cyan)">${k.in_work}</b><span>видео в работе</span></div></div>`;
+}
+function today() {
+  let h = kpi() + '<h2>Задачи на сегодня</h2>';
+  h += D.tasks.length ? D.tasks.map(t => `<div class="card task" onclick="toggle('done','${esc(t.id)}')"><div class="box ${has('done', t.id) ? 'on' : ''}">${has('done', t.id) ? '✓' : ''}</div><div>${esc(t.text)}${t.due ? `<div class="ru">до ${esc(t.due)}</div>` : ''}</div></div>`).join('') : '<div class="empty">Задач нет 🎉</div>';
+  h += '<h2>Выбранные темы — в производстве</h2>';
+  h += D.picks.length ? D.picks.map(p => `<div class="card"><span class="chip l">${p.started ? 'в работе' : 'ждёт старта'}</span><div class="hook">${esc(p.topic.hook || p.id)}</div><div class="ru">${esc(p.topic.title_ru || '')}</div></div>`).join('') : '<div class="empty">Пока нет — выбери тему во вкладке «Темы».</div>';
+  const r = D.stats.report;
+  if (r) h += `<h2>Главное из отчёта · ${esc(r.date)}</h2><div class="card"><ul class="rep">${r.summary.slice(0, 2).map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>`;
+  return h;
+}
+function topic(t) {
+  const pk = has('pick', t.id), rj = has('reject', t.id), labels = ['Есть у всех', 'Кому переслать', 'Действие', 'Личный хук'];
+  return `<div class="card ${pk ? 'sel' : ''}" style="${rj ? 'opacity:.45' : ''}">
+    <span class="chip">${esc(t.cat)}</span><span class="chip g">${esc(t.format)}</span>${t.picked ? '<span class="chip l">уже выбрана</span>' : ''}
+    <div class="hook">${esc(t.hook)}</div><div class="ru">${esc(t.title_ru)}</div>
+    <div class="cover"><div class="t1">${esc((t.cover || '').split(' / ')[0])}</div><div class="t2">${esc((t.cover || '').split(' / ')[1] || '')}</div>${t.pill ? `<div class="p">${esc(t.pill)}</div>` : ''}</div>
+    <div class="row"><span class="l">Кому перешлют</span><span>${esc(t.who)}</span></div>
+    <div class="row"><span class="l">Почему</span><span>${esc(t.why)}</span></div>
+    <div class="row"><span class="l">Действие</span><span>${esc(t.action)}</span></div>
+    <div class="row"><span class="l">Итог зрителю</span><span>${esc(t.payoff_ru)}</span></div>
+    <div class="row"><span class="l">Хук-формула</span><span>${esc(t.formula)}</span></div>
+    <div class="checks">${(t.checks || []).map((c, i) => `<span class="${c ? 'ok' : 'no'}">${c ? '✓' : '✕'} ${labels[i]}</span>`).join('')}</div>
+    <div class="ru" style="margin:8px 0 0">Проверю факты после выбора: ${esc(t.verify)}</div>
+    ${t.picked ? '' : `<div class="btns"><button class="b1 ${pk ? 'on' : ''}" onclick="toggle('pick','${t.id}')">${pk ? '✓ Выбрана' : 'Выбрать'}</button><button class="b2" onclick="toggle('reject','${t.id}')">${rj ? 'Вернуть' : 'Убрать'}</button></div>`}
+  </div>`;
+}
+function topicsTab() {
+  const days = [...new Set(D.topics.map(t => t.day))];
+  let h = '<div class="legend">Каждый день — 5 новых тем, все проходят 4 проверки на пересылаемость. Выбери 1–2 и нажми «Отправить».</div>';
+  h += days.map(d => `<h2>${d === days[0] ? 'Сегодня' : esc(d)}</h2>` + D.topics.filter(t => t.day === d).map(topic).join('')).join('') || '<div class="empty">Темы появятся в 09:05.</div>';
+  h += `<h2>Своя тема</h2><div class="card"><div class="ru">Напиши идею — проверю по 4 критериям и добавлю.</div><textarea id="want" placeholder="Например: почему зимой садится аккумулятор…"></textarea><div class="btns"><button class="b1" onclick="const v=document.getElementById('want').value.trim();if(v){Q.push(['want',v]);render()}">Добавить в отправку</button></div></div>`;
+  return h;
+}
+function statFor(v) { const id = v.posted && v.posted.media_id; return id ? (D.stats.media || []).find(m => m.id === id) : null; }
+function videosTab() {
+  return D.videos.map(v => {
+    const i = ['script', 'voice', 'render', 'ready', 'delivered', 'posted'].indexOf(v.stage), s = statFor(v), pq = has('posted', v.v);
+    return `<div class="card"><div style="display:flex;justify-content:space-between"><b>${esc(v.v)} · ${esc(v.slug)}</b><span class="stage" style="${v.stage === 'delivered' ? 'color:var(--gold)' : ''}">${esc(v.stage_ru)}</span></div>
+      <div class="steps">${[0, 1, 2, 3, 4, 5].map(k => `<i class="${k <= i ? 'on' : ''}"></i>`).join('')}</div>
+      <div class="hook" style="font-size:15px">${esc(v.hook)}</div>
+      ${v.cover ? `<div class="row"><span class="l">Обложка</span><span>${esc(v.cover)}</span></div>` : ''}
+      ${v.who ? `<div class="row"><span class="l">Для кого</span><span>${esc(v.who)}</span></div>` : ''}
+      ${v.action ? `<div class="row"><span class="l">Действие</span><span>${esc(v.action)}</span></div>` : ''}
+      ${s ? `<div class="st"><span><b>${fmt(s.views)}</b> просм.</span><span><b>${fmt(s.shares)}</b> пересыл.</span><span><b>${fmt(s.saved)}</b> сохр.</span><span>share <b style="color:${s.share_rate >= 1 ? 'var(--lime)' : 'var(--red)'}">${s.share_rate}%</b></span></div>` : ''}
+      ${v.notes.length ? `<div class="ru" style="margin-top:6px">Правки: ${v.notes.map(esc).join(' · ')}</div>` : ''}
+      <div class="btns">${v.stage === 'delivered' ? `<button class="b1 ${pq ? 'on' : ''}" onclick="toggle('posted','${v.v}')">${pq ? '✓ Выложил' : 'Выложил'}</button>` : ''}
+      ${v.stage !== 'posted' ? `<button class="b2" onclick="document.getElementById('n-${v.v}').classList.toggle('hide')">Правка</button>` : ''}</div>
+      <div id="n-${v.v}" class="hide"><textarea id="t-${v.v}" placeholder="Что исправить?"></textarea><div class="btns"><button class="b1" onclick="const x=document.getElementById('t-${v.v}').value.trim();if(x){Q.push(['note','${v.v}',x]);render()}">Добавить правку</button></div></div>
+    </div>`;
+  }).join('') || '<div class="empty">Нет видео.</div>';
+}
+function statsTab() {
+  const S = D.stats, r = S.report || {}, m = [...(S.media || [])].sort((a, b) => a.ts < b.ts ? -1 : 1), mx = Math.max(...m.map(x => x.views), 1);
+  let h = `<h2>Отчёт · ${esc(r.date || '')} · ${esc(r.period || '')}</h2><div class="card"><ul class="rep">${(r.summary || []).map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>`;
+  h += `<h2>Что делаем</h2><div class="card"><ul class="rep">${(r.actions || []).map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>`;
+  h += `<h2>Просмотры по роликам</h2><div class="legend"><b>■</b> пересылки ≥1% — тема «пересылается» · <span style="color:var(--red)">■</span> &lt;0,3%</div><div class="card">`;
+  h += m.map(x => `<div class="bar"><span class="n">${esc(x.ts.slice(5, 10))} ${esc(x.title)}</span><span class="tr"><i style="width:${Math.max(2, x.views / mx * 100)}%;background:${x.share_rate >= 1 ? 'var(--lime)' : x.share_rate >= .3 ? 'var(--gold)' : 'var(--red)'}"></i></span><span class="v">${fmt(x.views)}<br><span style="color:var(--dim)">${x.share_rate}%</span></span></div>`).join('');
+  h += `</div><div class="legend">Данные Instagram через Windsor · обновлено ${esc(S.updated || '')}. Отчёт — каждые 3 дня.</div>`;
+  return h;
+}
+function render() {
+  if (!D) return; tabs(); document.getElementById('upd').innerHTML = `обновлено ${esc(D.updated)}<br>проверка ${esc((D.next_tick || '').slice(11, 16))}`;
+  document.getElementById('main').innerHTML = {today, topics: topicsTab, videos: videosTab, stats: statsTab}[TAB](); sendBtn();
+}
+fetch('data.json?t=' + Date.now()).then(r => r.json()).then(d => { D = d; render(); }).catch(e => document.getElementById('main').innerHTML = '<div class="empty">Не удалось загрузить данные: ' + esc(e) + '</div>');
+</script>
+</body>
+</html>
