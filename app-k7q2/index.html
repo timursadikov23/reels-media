@@ -6,14 +6,14 @@
 <title>Konveyer</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-:root{--bg:#110E1E;--card:#1B1730;--card2:#231E3D;--line:#2E2850;--txt:#F2F0FA;--dim:#9A93B8;--lime:#C6F432;--cyan:#38E1F0;--gold:#FFC23D;--red:#FF4D6A;--vio:#9B7BFF}
+:root{--bg:#F4F3F8;--card:#FFFFFF;--card2:#EFEDF6;--line:#E3E0EE;--txt:#17142A;--dim:#6E6889;--lime:#C6F432;--lg:#4F7D00;--cyan:#0A84A8;--gold:#B87400;--red:#E0294B;--vio:#6B4EE6}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif}
 body{padding:0 0 calc(96px + env(safe-area-inset-bottom))}
-header{padding:16px 16px 8px;position:sticky;top:0;background:linear-gradient(var(--bg) 82%,transparent);z-index:5}
+header{padding:16px 16px 8px;position:sticky;top:0;background:linear-gradient(var(--bg) 82%,#F4F3F800);z-index:5}
 .top{display:flex;justify-content:space-between;align-items:center}
 h1{font-size:20px;margin:0;font-weight:800;letter-spacing:-.3px}
-h1 b{color:var(--lime)}
+h1 b{color:var(--lg)}
 .upd{font-size:11px;color:var(--dim);text-align:right}
 .tabs{display:flex;gap:6px;margin-top:12px;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
@@ -26,36 +26,36 @@ main{padding:4px 16px}
 .k b{display:block;font-size:22px;font-weight:800}
 .k span{font-size:12px;color:var(--dim)}
 h2{font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--dim);margin:18px 0 8px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px}
-.card.sel{border-color:var(--lime);box-shadow:0 0 0 1px var(--lime) inset}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:0 1px 3px #17142a0d}
+.card.sel{border-color:var(--lg);box-shadow:0 0 0 2px var(--lime) inset}
 .chip{display:inline-block;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:var(--card2);color:var(--cyan);margin:0 4px 6px 0}
-.chip.g{color:var(--gold)}.chip.l{color:var(--lime)}.chip.r{color:var(--red)}
+.chip.g{color:var(--gold)}.chip.l{color:var(--lg)}.chip.r{color:var(--red)}
 .hook{font-size:17px;font-weight:700;line-height:1.3;margin:4px 0 6px}
 .ru{color:var(--dim);font-size:13px;margin-bottom:10px}
 .row{display:flex;gap:8px;font-size:13px;margin:5px 0}
 .row .l{flex:0 0 92px;color:var(--dim)}
-.cover{background:radial-gradient(120% 90% at 50% 100%,#2b2550,#110E1E);border-radius:12px;padding:14px 10px;text-align:center;margin:8px 0 10px;border:1px solid var(--line)}
+.cover{color:#fff;background:radial-gradient(120% 90% at 50% 100%,#2b2550,#110E1E);border-radius:12px;padding:14px 10px;text-align:center;margin:8px 0 10px;border:1px solid var(--line)}
 .cover .t1{font-weight:900;font-size:18px;letter-spacing:.2px}
 .cover .t2{font-weight:900;font-size:15px;color:var(--lime);margin-top:2px}
 .cover .p{display:inline-block;margin-top:8px;background:var(--lime);color:#14101F;font-weight:800;font-size:11px;padding:4px 10px;border-radius:999px}
 .checks{display:flex;gap:6px;margin:8px 0 2px;flex-wrap:wrap}
 .checks span{font-size:11px;padding:2px 8px;border-radius:6px;background:var(--card2)}
-.checks .ok{color:var(--lime)}.checks .no{color:var(--red)}
+.checks .ok{color:var(--lg)}.checks .no{color:var(--red)}
 .btns{display:flex;gap:8px;margin-top:10px}
 button{font:inherit;border:0;border-radius:12px;padding:10px 12px;font-weight:700;cursor:pointer}
 .b1{background:var(--lime);color:#14101F;flex:1}
 .b2{background:var(--card2);color:var(--txt);border:1px solid var(--line)}
-.b1.on{background:#3a4a10;color:var(--lime)}
+.b1.on{background:#17142A;color:var(--lime)}
 .task{display:flex;gap:10px;align-items:flex-start}
-.box{flex:0 0 24px;height:24px;border-radius:8px;border:2px solid var(--lime);display:grid;place-items:center;color:#14101F;font-weight:900}
+.box{flex:0 0 24px;height:24px;border-radius:8px;border:2px solid var(--lg);display:grid;place-items:center;color:#14101F;font-weight:900}
 .box.on{background:var(--lime)}
 .steps{display:flex;gap:3px;margin:8px 0 4px}
 .steps i{flex:1;height:6px;border-radius:3px;background:var(--line)}
-.steps i.on{background:var(--lime)}
-.stage{font-size:12px;font-weight:700;color:var(--lime)}
+.steps i.on{background:var(--lg)}
+.stage{font-size:12px;font-weight:700;color:var(--lg)}
 .st{display:flex;gap:12px;font-size:13px;margin-top:6px;flex-wrap:wrap}
 .st b{font-size:15px}
-textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:12px;color:var(--txt);font:inherit;padding:10px;min-height:64px;margin-top:8px;resize:vertical}
+textarea{width:100%;background:var(--card2);border:1px solid var(--line);border-radius:12px;color:var(--txt);font:inherit;padding:10px;min-height:64px;margin-top:8px;resize:vertical}
 .bar{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:12px}
 .bar .n{flex:0 0 112px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--dim)}
 .bar .tr{flex:1;height:14px;background:var(--card2);border-radius:4px;overflow:hidden}
@@ -63,10 +63,10 @@ textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-rad
 .bar .v{flex:0 0 74px;text-align:right;font-variant-numeric:tabular-nums}
 ul.rep{margin:0;padding-left:18px}ul.rep li{margin:6px 0;font-size:14px}
 .legend{font-size:11px;color:var(--dim);margin:4px 0 8px}
-.legend b{color:var(--lime)}
-#send{position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));display:none;background:var(--lime);color:#14101F;font-size:16px;padding:15px;border-radius:16px;box-shadow:0 8px 30px #0008;z-index:9}
+.legend b{color:var(--lg)}
+#send{position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));display:none;background:var(--lime);color:#14101F;font-size:16px;padding:15px;border-radius:16px;box-shadow:0 8px 24px #17142a33;z-index:9}
 .empty{color:var(--dim);font-size:14px;padding:8px 0}
-.note{background:#2a1f12;border:1px solid #5a4318;color:var(--gold);border-radius:12px;padding:10px 12px;font-size:13px;margin:8px 0}
+.note{background:#FFF4DC;border:1px solid #F1D08A;color:#7A4E00;border-radius:12px;padding:10px 12px;font-size:13px;margin:8px 0}
 .hide{display:none}
 </style>
 </head>
@@ -78,7 +78,7 @@ ul.rep{margin:0;padding-left:18px}ul.rep li{margin:6px 0;font-size:14px}
 <main id="main"><div class="empty">Загрузка…</div></main>
 <button id="send"></button>
 <script>
-const tg = window.Telegram && Telegram.WebApp; if (tg) { tg.ready(); tg.expand(); try{tg.setHeaderColor('#110E1E');tg.setBackgroundColor('#110E1E')}catch(e){} }
+const tg = window.Telegram && Telegram.WebApp; if (tg) { tg.ready(); tg.expand(); try{tg.setHeaderColor('#F4F3F8');tg.setBackgroundColor('#F4F3F8')}catch(e){} }
 let D = null, TAB = 'today', Q = [];   // Q = queued actions, sent together
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const fmt = n => (n ?? 0).toLocaleString('ru-RU');
@@ -161,7 +161,7 @@ function videosTab() {
       ${v.cover ? `<div class="row"><span class="l">Обложка</span><span>${esc(v.cover)}</span></div>` : ''}
       ${v.who ? `<div class="row"><span class="l">Для кого</span><span>${esc(v.who)}</span></div>` : ''}
       ${v.action ? `<div class="row"><span class="l">Действие</span><span>${esc(v.action)}</span></div>` : ''}
-      ${s ? `<div class="st"><span><b>${fmt(s.views)}</b> просм.</span><span><b>${fmt(s.shares)}</b> пересыл.</span><span><b>${fmt(s.saved)}</b> сохр.</span><span>share <b style="color:${s.share_rate >= 1 ? 'var(--lime)' : 'var(--red)'}">${s.share_rate}%</b></span></div>` : ''}
+      ${s ? `<div class="st"><span><b>${fmt(s.views)}</b> просм.</span><span><b>${fmt(s.shares)}</b> пересыл.</span><span><b>${fmt(s.saved)}</b> сохр.</span><span>share <b style="color:${s.share_rate >= 1 ? 'var(--lg)' : 'var(--red)'}">${s.share_rate}%</b></span></div>` : ''}
       ${v.notes.length ? `<div class="ru" style="margin-top:6px">Правки: ${v.notes.map(esc).join(' · ')}</div>` : ''}
       <div class="btns">${v.stage === 'delivered' ? `<button class="b1 ${pq ? 'on' : ''}" onclick="toggle('posted','${v.v}')">${pq ? '✓ Выложил' : 'Выложил'}</button>` : ''}
       ${v.stage !== 'posted' ? `<button class="b2" onclick="document.getElementById('n-${v.v}').classList.toggle('hide')">Правка</button>` : ''}</div>
@@ -174,7 +174,7 @@ function statsTab() {
   let h = `<h2>Отчёт · ${esc(r.date || '')} · ${esc(r.period || '')}</h2><div class="card"><ul class="rep">${(r.summary || []).map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>`;
   h += `<h2>Что делаем</h2><div class="card"><ul class="rep">${(r.actions || []).map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>`;
   h += `<h2>Просмотры по роликам</h2><div class="legend"><b>■</b> пересылки ≥1% — тема «пересылается» · <span style="color:var(--red)">■</span> &lt;0,3%</div><div class="card">`;
-  h += m.map(x => `<div class="bar"><span class="n">${esc(x.ts.slice(5, 10))} ${esc(x.title)}</span><span class="tr"><i style="width:${Math.max(2, x.views / mx * 100)}%;background:${x.share_rate >= 1 ? 'var(--lime)' : x.share_rate >= .3 ? 'var(--gold)' : 'var(--red)'}"></i></span><span class="v">${fmt(x.views)}<br><span style="color:var(--dim)">${x.share_rate}%</span></span></div>`).join('');
+  h += m.map(x => `<div class="bar"><span class="n">${esc(x.ts.slice(5, 10))} ${esc(x.title)}</span><span class="tr"><i style="width:${Math.max(2, x.views / mx * 100)}%;background:${x.share_rate >= 1 ? 'var(--lg)' : x.share_rate >= .3 ? 'var(--gold)' : 'var(--red)'}"></i></span><span class="v">${fmt(x.views)}<br><span style="color:var(--dim)">${x.share_rate}%</span></span></div>`).join('');
   h += `</div><div class="legend">Данные Instagram через Windsor · обновлено ${esc(S.updated || '')}. Отчёт — каждые 3 дня.</div>`;
   return h;
 }
