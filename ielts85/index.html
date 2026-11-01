@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>IELTS 8.5</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F3EE; --card:#FFFFFF; --ink:#16161A; --mute:#6B6A66; --line:#E6E2D9;
+  --acc:#FFC72C; --acc-ink:#16161A;
+  --L:#2F6FEB; --R:#15803D; --W:#E2561B; --S:#8B3FD9; --V:#57534E; --X:#16161A;
+  --ok:#15803D; --bad:#C2410C;
+  --r:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--ink);font-family:Manrope,system-ui,sans-serif;font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased}
+.num{font-family:"JetBrains Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:560px;margin:0 auto;padding:0 14px 90px}
+header.top{position:sticky;top:0;z-index:5;background:var(--bg);padding:12px 0 8px}
+.brand{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.brand h1{font-size:19px;font-weight:800;letter-spacing:-.02em}
+.brand h1 b{background:var(--acc);padding:0 6px;border-radius:6px}
+.sync{font-size:12px;color:var(--mute);display:flex;align-items:center;gap:6px}
+.dot{width:8px;height:8px;border-radius:50%;background:#bbb}
+.dot.on{background:var(--ok)} .dot.local{background:#D97706}
+nav.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 13px Manrope,system-ui,sans-serif;padding:8px 13px;border-radius:999px;cursor:pointer}
+nav.tabs button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-top:12px}
+.hero{background:var(--ink);color:#fff;border:none}
+.hero .big{font-size:56px;font-weight:700;line-height:1;letter-spacing:-.03em;color:var(--acc)}
+.hero .row{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.hero small{color:#B9B7B0;font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.stat{background:#24242A;border-radius:12px;padding:10px}
+.stat .v{font-size:20px;font-weight:700}
+.stat .k{font-size:11.5px;color:#B9B7B0}
+h2{font-size:16px;font-weight:800;letter-spacing:-.01em;margin-bottom:8px}
+h3{font-size:14px;font-weight:700;margin:12px 0 6px}
+.mute{color:var(--mute);font-size:13px}
+.pill{display:inline-block;font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--acc);color:var(--acc-ink)}
+.datenav{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.datenav button{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--card);font-size:18px;cursor:pointer}
+.datenav .d{text-align:center;font-weight:700}
+.task{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--line);cursor:pointer;user-select:none}
+.task:first-of-type{border-top:none}
+.cb{flex:0 0 24px;height:24px;border-radius:8px;border:2px solid #C9C4B8;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:.15s}
+.task.done .cb{background:var(--ok);border-color:var(--ok)}
+.task.done .cb::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.task.done .tt{text-decoration:line-through;color:var(--mute)}
+.tt{font-weight:700;font-size:14.5px}
+.how{font-size:12.5px;color:var(--mute);margin-top:2px}
+.tag{display:inline-block;font:700 11px "JetBrains Mono",ui-monospace,monospace;color:#fff;border-radius:6px;padding:1px 6px;margin-right:6px;vertical-align:1px}
+.min{margin-left:auto;font:600 12.5px "JetBrains Mono",ui-monospace,monospace;color:var(--mute);white-space:nowrap}
+.bar{height:10px;background:#EEEAE1;border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ok);border-radius:99px;transition:width .3s}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:10px}
+.wd{text-align:center;font-size:11px;color:var(--mute)}
+.wd .sq{height:30px;border-radius:9px;background:#EEEAE1;margin-top:4px;display:flex;align-items:center;justify-content:center;font:700 11px "JetBrains Mono",ui-monospace,monospace;color:var(--ink)}
+.wd .sq.p{background:#FDE68A}.wd .sq.f{background:var(--ok);color:#fff}.wd .sq.t{outline:2px solid var(--ink)}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.cell{border:1px solid var(--line);border-radius:12px;padding:8px;text-align:center}
+.cell .k{font:700 12px "JetBrains Mono",ui-monospace,monospace}
+.cell .v{font:700 20px "JetBrains Mono",ui-monospace,monospace}
+.cell .s{font-size:11.5px;color:var(--mute)}
+.up{color:var(--bad)} .okc{color:var(--ok)}
+label{display:block;font-size:12.5px;font-weight:700;color:var(--mute);margin:10px 0 4px}
+input,select,textarea{width:100%;font:500 15px Manrope,system-ui,sans-serif;color:var(--ink);background:#FBFAF7;border:1px solid var(--line);border-radius:12px;padding:10px 12px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--ink);background:#fff}
+textarea{resize:vertical;min-height:90px;line-height:1.5}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:none;border-radius:12px;padding:12px 16px;font:700 14.5px Manrope,system-ui,sans-serif;cursor:pointer;background:var(--ink);color:#fff;width:100%;margin-top:12px}
+.btn.y{background:var(--acc);color:var(--acc-ink)}
+.btn.g{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.5;cursor:default}
+.seg{display:flex;background:#EEEAE1;border-radius:12px;padding:3px;gap:3px}
+.seg button{flex:1;border:none;background:none;padding:8px;border-radius:9px;font:700 13px Manrope,system-ui,sans-serif;cursor:pointer;color:var(--mute)}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.list .it{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}
+.list .it:first-child{border-top:none}
+.x{margin-left:auto;border:none;background:none;color:#A8A29E;font-size:18px;cursor:pointer;padding:0 4px}
+.hbar{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:13px}
+.hbar .lb{flex:0 0 46%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbar .tr{flex:1;height:8px;background:#EEEAE1;border-radius:9px;overflow:hidden}
+.hbar .tr i{display:block;height:100%}
+.hbar .n{font:700 12px "JetBrains Mono",ui-monospace,monospace;width:22px;text-align:right}
+.flash{border:2px dashed var(--line);border-radius:14px;padding:22px 16px;text-align:center;min-height:150px;display:flex;flex-direction:column;justify-content:center;gap:8px}
+.flash .term{font-size:22px;font-weight:800;letter-spacing:-.01em}
+.flash .mean{font-size:15px}
+.flash .ex{font-size:13px;color:var(--mute);font-style:italic}
+.timer{font:700 64px "JetBrains Mono",ui-monospace,monospace;text-align:center;letter-spacing:-.03em;margin:8px 0}
+.timer.prep{color:#D97706}.timer.talk{color:var(--S)}
+.cue{background:#FBFAF7;border:1px solid var(--line);border-radius:14px;padding:14px}
+.cue b{font-size:16px}
+.cue ul{margin:8px 0 0 18px;font-size:14px}
+.res .band{font:700 40px "JetBrains Mono",ui-monospace,monospace;color:var(--W)}
+.res .fx{padding:10px 0;border-top:1px solid var(--line);font-size:14px}
+.res .orig{color:var(--mute);text-decoration:line-through;font-size:13.5px}
+.res .impr{font-weight:600;font-size:14px;margin-top:3px}
+details{border-top:1px solid var(--line);padding:10px 0}
+details summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:8px;font-weight:700;font-size:14px}
+details summary::-webkit-details-marker{display:none}
+.note{font-size:12.5px;color:var(--mute);background:#FBFAF7;border-radius:10px;padding:10px;margin-top:10px}
+.legend{display:flex;flex-wrap:wrap;gap:10px;font-size:12px;margin-top:6px}
+.legend span::before{content:"";display:inline-block;width:10px;height:3px;border-radius:2px;background:currentColor;margin-right:5px;vertical-align:3px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-size:13.5px;font-weight:600;opacity:0;transition:.25s;pointer-events:none;z-index:20;max-width:90vw}
+.toast.show{opacity:1}
+a{color:var(--L)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <h1>IELTS <b>8.5</b></h1>
+      <div class="sync"><span class="dot" id="syncDot"></span><span id="syncTxt">загрузка…</span></div>
+    </div>
+    <nav class="tabs" id="tabs"></nav>
+  </header>
+  <main id="main"></main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad=n=>String(n).padStart(2,'0');
+const ymd=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const parseD=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);};
+const addDays=(s,n)=>{const d=parseD(s);d.setDate(d.getDate()+n);return ymd(d);};
+const daysBetween=(a,b)=>Math.round((parseD(b)-parseD(a))/864e5);
+const todayStr=()=>ymd(new Date());
+const fmtD=(s,o)=>parseD(s).toLocaleDateString('ru-RU',o||{weekday:'short',day:'numeric',month:'short'});
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const fx=v=>v==null||isNaN(v)?'—':Number(v).toFixed(1);
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('show'),2200);}
+function plural(n,a,b,c){n=Math.abs(n)%100;const n1=n%10;if(n>10&&n<20)return c;if(n1>1&&n1<5)return b;if(n1===1)return a;return c;}
+
+/* ---------- IELTS maths ---------- */
+const LIS=[[39,9],[37,8.5],[35,8],[32,7.5],[30,7],[26,6.5],[23,6],[18,5.5],[16,5],[13,4.5],[11,4],[8,3.5],[6,3],[4,2.5],[0,0]];
+const RAC=[[39,9],[37,8.5],[35,8],[33,7.5],[30,7],[27,6.5],[23,6],[19,5.5],[15,5],[13,4.5],[10,4],[8,3.5],[6,3],[4,2.5],[0,0]];
+const RGT=[[40,9],[39,8.5],[37,8],[36,7.5],[34,7],[32,6.5],[30,6],[27,5.5],[23,5],[19,4.5],[15,4],[12,3.5],[9,3],[6,2.5],[0,0]];
+const conv=(t,raw)=>{for(const [m,b] of t) if(raw>=m) return b; return 0;};
+function overallBand(arr){
+  const a=Math.round(arr.reduce((s,x)=>s+x,0)/arr.length*1000)/1000;
+  const f=Math.floor(a), r=a-f;
+  return r<0.25?f:(r<0.75?f+0.5:f+1);
+}
+const SEC={L:'Listening',R:'Reading',W:'Writing',S:'Speaking',V:'Лексика',X:'Общее'};
+
+/* ---------- storage: Telegram CloudStorage with local fallback ---------- */
+const TG=(window.Telegram&&Telegram.WebApp)||null;
+const inTG=!!(TG&&TG.initData);
+if(TG){try{TG.ready();TG.expand();TG.setHeaderColor&&TG.setHeaderColor('#F5F3EE');TG.setBackgroundColor&&TG.setBackgroundColor('#F5F3EE');}catch(e){}}
+const CS=inTG&&TG.CloudStorage&&(!TG.isVersionAtLeast||TG.isVersionAtLeast('6.9'))?TG.CloudStorage:null;
+const hap=(k)=>{try{if(!inTG)return;k==='ok'?TG.HapticFeedback.notificationOccurred('success'):TG.HapticFeedback.impactOccurred('light');}catch(e){}};
+const COLLS=['ielts_meta','ielts_days','ielts_mocks','ielts_essays','ielts_mistakes'];
+const S={}; COLLS.forEach(c=>S[c]={});
+const LS='ielts85_tg_v1';
+try{const raw=localStorage.getItem(LS); if(raw){const o=JSON.parse(raw); COLLS.forEach(c=>{if(o[c])S[c]=o[c];});}}catch(e){}
+function saveLocal(){try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){}}
+let dbMode='loading', cloudReady=false;
+const csP=(fn,...a)=>new Promise((res,rej)=>{try{CS[fn](...a,(err,val)=>err?rej(err):res(val));}catch(e){rej(e);}});
+const cloudKey=(c,id)=>c==='ielts_days'?'d_'+id:c==='ielts_meta'?'m_'+id:'c_'+c;
+const cloudVal=(c,id)=>c==='ielts_days'?S.ielts_days[id]:c==='ielts_meta'?S.ielts_meta[id]:S[c];
+const chunkN={}, chains={}, timers={}, pend={};
+async function cloudSave(key,val){
+  const str=val===undefined?'':JSON.stringify(val), N=3800, parts=[];
+  for(let i=0;i<str.length;i+=N) parts.push(str.slice(i,i+N));
+  for(let i=0;i<parts.length;i++) await csP('setItem',key+'_p'+i,parts[i]);
+  await csP('setItem',key,String(parts.length));
+  const old=chunkN[key]||0; if(old>parts.length){const rm=[];for(let i=parts.length;i<old;i++)rm.push(key+'_p'+i);await csP('removeItems',rm);}
+  chunkN[key]=parts.length;
+}
+function queueSave(c,id){
+  const key=cloudKey(c,id); pend[key]=[c,id];
+  if(!CS||!cloudReady) return;
+  clearTimeout(timers[key]);
+  timers[key]=setTimeout(()=>{ delete pend[key];
+    chains[key]=(chains[key]||Promise.resolve()).then(()=>cloudSave(key,cloudVal(c,id))).catch(()=>{toast('Не сохранилось в облако Telegram — сохранено на устройстве');});
+  },450);
+}
+function put(c,id,data){ S[c]={...S[c],[id]:data}; saveLocal(); refresh(); queueSave(c,id); }
+function del(c,id){ const o={...S[c]}; delete o[id]; S[c]=o; saveLocal(); refresh(); queueSave(c,id); }
+function setSync(mode,txt){dbMode=mode;$('#syncDot').className='dot '+(mode==='on'?'on':mode==='local'?'local':'');$('#syncTxt').textContent=txt;}
+async function cloudLoad(){
+  const keys=await csP('getKeys'); const vals={};
+  for(let i=0;i<keys.length;i+=20) Object.assign(vals,await csP('getItems',keys.slice(i,i+20)));
+  const out={}; COLLS.forEach(c=>out[c]={}); let heads=0;
+  keys.filter(k=>!/_p\d+$/.test(k)).forEach(k=>{
+    const n=parseInt(vals[k],10); if(!(n>=0)) return; heads++; chunkN[k]=n;
+    let str=''; for(let i=0;i<n;i++) str+=vals[k+'_p'+i]||''; if(!str) return;
+    let v; try{v=JSON.parse(str);}catch(e){return;}
+    if(k.startsWith('d_')) out.ielts_days[k.slice(2)]=v; else if(k.startsWith('m_')) out.ielts_meta[k.slice(2)]=v; else if(k.startsWith('c_')&&COLLS.includes(k.slice(2))) out[k.slice(2)]=v;
+  });
+  return {out,heads};
+}
+(async()=>{
+  if(!CS){ setSync('local',inTG?'сохранено на этом устройстве':'открой через Telegram-бота'); return; }
+  setSync('loading','синхронизация…');
+  try{
+    const {out,heads}=await cloudLoad();
+    const local=JSON.parse(JSON.stringify(S)); const pk={...pend};
+    if(heads===0){
+      cloudReady=true;
+      COLLS.forEach(c=>{ if(c==='ielts_days'||c==='ielts_meta') Object.keys(S[c]).forEach(id=>queueSave(c,id)); else if(Object.keys(S[c]).length) queueSave(c,'all'); });
+    } else {
+      COLLS.forEach(c=>S[c]=out[c]);
+      Object.values(pk).forEach(([c,id])=>{ if(c==='ielts_days'||c==='ielts_meta'){ if(local[c][id]!==undefined) S[c]={...S[c],[id]:local[c][id]}; } else S[c]={...S[c],...local[c]}; });
+      cloudReady=true; Object.values(pk).forEach(([c,id])=>queueSave(c,id));
+    }
+    saveLocal(); setSync('on','облако Telegram ✓'); refresh();
+  }catch(e){ setSync('local','облако недоступно — сохраняю на устройстве'); }
+})();
+document.addEventListener('click',e=>{const a=e.target.closest('a[href^="http"]'); if(!a) return; e.preventDefault(); try{ inTG?TG.openLink(a.href):window.open(a.href,'_blank'); }catch(_){ location.href=a.href; }});
+
+/* ---------- settings ---------- */
+const DEF={examDate:'2027-01-09',start:'2026-11-01',module:'Academic',tL:9,tR:8.5,tW:7.5,tS:8};
+const settings=()=>Object.assign({},DEF,(S.ielts_meta.settings)||{});
+
+/* ---------- plan ---------- */
+const T=(sec,title,min,how='')=>({sec,title,min,how});
+const VOC=(m=15)=>T('V','Лексика: карточки дня + 5 новых коллокаций',m,'Вкладка «Слова». Новые берёшь из сегодняшних текстов и разборов эссе.');
+const PH={
+ p1:{name:'Фаза 1 · Фундамент',focus:'Структура Writing на 8 и техника Reading по каждому типу вопросов.'},
+ p2:{name:'Фаза 2 · Интенсив',focus:'Всё на время, больше объёма, каждая ошибка — в журнал с причиной.'},
+ p3:{name:'Фаза 3 · Моки',focus:'Экзаменационные условия. Суббота — полный мок L+R+W, воскресенье — разбор.'},
+ tp:{name:'Разгрузка',focus:'Держим форму, ничего нового. Сон важнее лишнего теста.'}
+};
+const P1={
+ 1:[T('W','Task 2 эссе на время (opinion) — 40 мин',40,'Cambridge 15–19, 270–300 слов. Сразу вставь во вкладку Writing → проверка.'),T('W','Переписать 2 слабых абзаца по разбору',20,'Закрой каждое замечание по CC и LR.'),T('R','1 passage на T/F/NG — 20 мин',20,'Каждую ошибку — в «Ошибки» с причиной: не нашёл / неверно понял / спутал NG и F.'),VOC()],
+ 2:[T('R','Matching headings: 2 сета по 20 мин',40,'Сначала только первое и последнее предложение абзаца. Ошибки — в журнал.'),T('L','Section 3: тест, затем повтор с транскриптом',25,'Отметь в транскрипте, где был ответ и где ловушка.'),T('S','Part 1: 6 вопросов вслух, по 3–4 предложения',10,'Без «ээ»: “That’s an interesting one…”, “Off the top of my head…”'),VOC()],
+ 3:[T('W','Task 1 (график/таблица) — 20 мин',20,'Overview обязательно во 2-м абзаце. Проверь как Task 1.'),T('W','3 плана эссе по 5 мин',15,'Thesis + 2 идеи + конкретный пример на каждую.'),T('S','Part 2: 2 карточки с таймером + запись',20,'Вкладка Speaking. Переслушай: паузы, повторы слов, ошибки времён.'),T('R','Summary completion: 1 сет',20,'Сначала предскажи часть речи для каждого пропуска.'),VOC()],
+ 4:[T('R','Полный Reading-тест — 60 мин',60,'Без перерыва. Сырой балл — во вкладку «Моки» (только R).'),T('R','Разбор ошибок по типам вопросов',20,'Все ошибки — в журнал. Смотри, какой тип даёт больше всего минусов.'),VOC()],
+ 5:[T('W','Task 2 эссе (discussion) — 40 мин',40,'Своё мнение — и во введении, и в заключении.'),T('W','Проверка + 5 улучшенных фраз в «Слова»',15),T('L','Section 4: тест + spelling-ошибки в журнал',20),VOC()],
+ 6:[T('L','Полный Listening — 40 мин с переносом',40,'Балл — во вкладку «Моки».'),T('W','Task 2 эссе — 40 мин',40,'Тип эссе, где был самый низкий балл.'),T('W','Проверка + переписать эссе целиком',20),VOC()],
+ 0:[T('X','Ревизия недели: журнал ошибок → 3 правила',25,'Вкладка «Ошибки» → топ типов. Пример правила: «NG — если информации в тексте нет вообще».'),T('W','Переписать худшее эссе недели на Band 8',30),T('S','Part 3: 4 вопроса по 45–60 сек',15,'Ответ → причина → пример → оговорка.'),VOC()]
+};
+const P2={
+ 1:[T('W','Task 2 эссе — 40 мин',40),T('W','Проверка + переписать по разбору',20),T('R','Passage 3 (самый сложный) — 20 мин',20,'Ошибки — в журнал.'),VOC()],
+ 2:[T('R','Полный Reading-тест — 60 мин',60,'Балл — в «Моки».'),T('R','Разбор: каждая ошибка с причиной',20),VOC()],
+ 3:[T('W','Task 1 — 20 мин',20),T('W','Task 2 — 40 мин',40),T('W','Проверка обоих + выписать фразы',20),VOC()],
+ 4:[T('L','Полный Listening — 40 мин',40,'Балл — в «Моки».'),T('S','Part 2 + Part 3: 2 карточки, запись',25),T('R','Matching information — 1 сет',20),VOC()],
+ 5:[T('R','Полный Reading-тест — 60 мин',60,'Балл — в «Моки».'),T('R','Разбор ошибок',20),VOC()],
+ 6:[T('W','Writing целиком: Task 1 + Task 2 подряд — 60 мин',60,'Как на экзамене: начни с Task 2.'),T('W','Проверка обоих',20),T('R','Passage 3 — 20 мин',20),VOC()],
+ 0:[T('X','Ревизия недели: журнал ошибок → 3 правила',25),T('W','Переписать худшее эссе недели на Band 8',30),T('S','Part 3: 4 вопроса по 45–60 сек',15),VOC()]
+};
+const P3={
+ 1:[T('W','Task 2 эссе — 40 мин',40),T('W','Проверка',15),T('R','2 passages подряд — 40 мин',40,'Ответы проверяй только в конце.'),VOC()],
+ 2:[T('L','Полный Listening — 40 мин',40,'Балл — в «Моки».'),T('S','Полный Speaking-тест 11–14 мин, запись',20,'Part 1 → Part 2 (карточка из вкладки) → Part 3.'),T('S','Разбор записи: 3 ошибки в журнал',15),VOC()],
+ 3:[T('R','Полный Reading-тест — 60 мин',60,'Балл — в «Моки».'),T('R','Разбор ошибок',20),VOC()],
+ 4:[T('W','Writing целиком: Task 1 + Task 2 — 60 мин',60),T('W','Проверка обоих',20),VOC()],
+ 5:[T('R','Passage 3 — 20 мин',20),T('L','Sections 3–4 — 20 мин',20),T('S','Part 2: 2 карточки',20),VOC()],
+ 6:[T('X','ПОЛНЫЙ МОК: Listening + Reading + Writing — 2 ч 40 мин',160,'Начни в то же время, что и на экзамене. Без телефона. Все баллы — в «Моки».')],
+ 0:[T('X','Разбор мока: все ошибки в журнал',40),T('W','Проверить оба текста мока',20),VOC()]
+};
+function planFor(ds){
+  const st=settings(); const d=daysBetween(ds,st.examDate);
+  if(ds<st.start) return {key:'pre',name:'До старта',focus:'План начинается '+fmtD(st.start,{day:'numeric',month:'long'})+'.',tasks:[]};
+  if(d<0) return {key:'post',name:'После экзамена',focus:'Экзамен позади.',tasks:[]};
+  if(d===0) return {key:'exam',name:'День экзамена',focus:'Всё уже сделано. Спокойно.',tasks:[T('X','Экзамен. Паспорт, вода, прийти за 30–40 мин',1)]};
+  if(ds===st.start) return {key:'diag',name:'Старт · Диагностика',focus:'Сегодня меряем точку А: Reading и Writing, твои слабые секции.',tasks:[
+    T('R','Полный Reading-тест — 60 мин',60,'Cambridge 19 или 18, Test 1. Сырой балл — во вкладку «Моки».'),
+    T('W','Task 2 эссе — 40 мин, потом проверка в Claude',40,'Вкладка Writing → «Проверить в Claude» → внеси 4 балла. Это стартовый балл по Writing.'),
+    T('X','Заполнить «Моки»: R и W',5,'Без цифр не будет плана коррекции.')]};
+  if(d===1) return {key:'rest',name:'Накануне',focus:'Отдых. Сон — до 23:00.',tasks:[VOC(10),T('X','Паспорт, маршрут до центра, время выхода',5)]};
+  const wd=parseD(ds).getDay();
+  if(d<=4) return {key:'tp',...PH.tp,tasks:[T('R','1 passage — 20 мин',20),T('L','1 section — 10 мин',10),T('S','Разминка Part 1–2',10),T('X','Перечитать свои правила и топ ошибок',15),VOC(10)]};
+  if(d<=24) return {key:'p3',...PH.p3,tasks:P3[wd]};
+  if(d<=48) return {key:'p2',...PH.p2,tasks:P2[wd]};
+  return {key:'p1',...PH.p1,tasks:P1[wd]};
+}
+function dayStats(ds){
+  const p=planFor(ds); const day=S.ielts_days[ds]||{done:[]}; const done=new Set(day.done||[]);
+  let tot=0,dm=0; p.tasks.forEach((t,i)=>{tot+=t.min; if(done.has(i)) dm+=t.min;});
+  return {p,done,tot,dm,ratio:tot?dm/tot:0};
+}
+function streak(){
+  const st=settings(); let ds=todayStr(); let n=0;
+  if(dayStats(ds).ratio<0.8) ds=addDays(ds,-1);
+  while(ds>=st.start){ const s=dayStats(ds); if(!s.p.tasks.length) break; if(s.ratio>=0.8){n++; ds=addDays(ds,-1);} else break; }
+  return n;
+}
+
+/* ---------- mocks ---------- */
+function mocksSorted(){return Object.entries(S.ielts_mocks).map(([id,m])=>({id,...m})).sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:(a.ts||0)-(b.ts||0));}
+function latest(){
+  const out={L:null,R:null,W:null,S:null};
+  mocksSorted().forEach(m=>{['L','R','W','S'].forEach(k=>{if(m[k]!=null) out[k]=m[k];});});
+  Object.values(S.ielts_essays).sort((a,b)=>(a.ts||0)-(b.ts||0)).forEach(e=>{ if(e.result&&e.task==='T2'&&e.result.band!=null){ out.Wai=e.result.band; } });
+  return out;
+}
+
+/* ---------- vocab ---------- */
+const INT=[0,1,3,7,14,30];
+const vocab=()=>((S.ielts_meta.vocab||{}).items)||[];
+function saveVocab(items,extra){put('ielts_meta','vocab',{...(S.ielts_meta.vocab||{}),...(extra||{}),items});}
+const STARTER=[
+['exacerbate the problem','усугубить проблему','Cutting funding would only exacerbate the problem.'],
+['a pressing issue','насущная проблема','Traffic congestion is a pressing issue in Tashkent.'],
+['disproportionately affect','непропорционально сильно влиять на','Rising prices disproportionately affect low-income families.'],
+['curb emissions','сократить выбросы','Governments must act to curb emissions from vehicles.'],
+['a double-edged sword','палка о двух концах','Social media is a double-edged sword for teenagers.'],
+['bridge the gap between','сократить разрыв между','Online courses can bridge the gap between rural and urban students.'],
+['pose a threat to','представлять угрозу для','Plastic waste poses a serious threat to marine life.'],
+['foster creativity','развивать креативность','Open-ended tasks foster creativity in children.'],
+['yield tangible results','давать ощутимые результаты','The reform has yet to yield tangible results.'],
+['be detrimental to','быть вредным для','Lack of sleep is detrimental to academic performance.'],
+['the benefits outweigh the drawbacks','плюсы перевешивают минусы','In my view, the benefits clearly outweigh the drawbacks.'],
+['a growing body of evidence','всё больше данных','A growing body of evidence links screen time to poor sleep.'],
+['allocate resources','распределять ресурсы','Schools should allocate more resources to teacher training.'],
+['raise awareness of','повышать осведомлённость о','Campaigns can raise awareness of healthy eating.'],
+['a viable alternative','реальная альтернатива','Cycling is a viable alternative to driving in cities.'],
+['deter sb from doing sth','удерживать кого-то от','Heavy fines may deter drivers from speeding.'],
+['place a burden on','ложиться бременем на','An ageing population places a burden on healthcare.'],
+['address the root cause','устранить первопричину','Punishment alone does not address the root cause of crime.'],
+['have far-reaching consequences','иметь далеко идущие последствия','Climate change will have far-reaching consequences.'],
+['be at odds with','противоречить','This policy is at odds with the government’s own goals.'],
+['strike a balance between','найти баланс между','Parents need to strike a balance between freedom and control.'],
+['take precedence over','иметь приоритет над','Safety should take precedence over profit.'],
+['an unprecedented rise in','беспрецедентный рост','There has been an unprecedented rise in remote work.'],
+['plummet / soar','резко упасть / резко вырасти (Task 1)','Sales plummeted in 2020 before soaring the following year.'],
+['account for (x%)','составлять (x%)','Coal accounted for roughly a third of total output.'],
+['level off','выровняться (Task 1)','The figure levelled off at around 40% after 2015.'],
+['a marginal increase','незначительный рост','There was only a marginal increase in exports.'],
+['be well-placed to','иметь все возможности для','Local councils are well-placed to tackle this issue.'],
+['it stands to reason that','логично, что','It stands to reason that better pay attracts better teachers.'],
+['tackle sth head-on','решать проблему напрямую','The government must tackle unemployment head-on.']
+];
+
+/* ---------- speaking cards ---------- */
+const CUES=[
+['Describe a skill you learned that took a long time',['what the skill is','how you learned it','why it took so long','and how you feel about it now'],['Which skills will be most important in the future?','Is it better to learn skills from teachers or on your own?']],
+['Describe a place in your country you would recommend to tourists',['where it is','what visitors can do there','when is the best time to go','and explain why you recommend it'],['How does tourism change local communities?','Should historical sites charge foreign visitors more?']],
+['Describe a time you helped someone solve a problem',['who the person was','what the problem was','how you helped','and how you felt afterwards'],['Why are some people more willing to help than others?','Should schools teach problem-solving as a subject?']],
+['Describe a piece of technology you couldn’t live without',['what it is','how often you use it','what you use it for','and explain why it is so important to you'],['Has technology made people less patient?','What technology will change education most?']],
+['Describe a person who has influenced your career',['who this person is','how you know them','what they did','and explain how they influenced you'],['What makes a good mentor?','Do young people today respect older colleagues?']],
+['Describe a journey that did not go as planned',['where you were going','what went wrong','how you dealt with it','and what you learned from it'],['Why do people enjoy adventure travel?','How has travel changed in the last 20 years?']],
+['Describe a decision you made that surprised other people',['what the decision was','when you made it','how people reacted','and whether it was the right decision'],['Do people make better decisions alone or in groups?','Should young people follow their parents’ advice about careers?']],
+['Describe a small business you like in your area',['what it is','what it sells or does','why you like it','and how it could be improved'],['Can small shops compete with online stores?','What qualities does a successful entrepreneur need?']],
+['Describe a time you taught someone something new',['who you taught','what you taught','how you did it','and how well they learned'],['Is teaching a talent or a skill that can be learned?','How will AI change the role of teachers?']],
+['Describe an outdoor activity you enjoy',['what the activity is','where and when you do it','who you do it with','and why you enjoy it'],['Why do city dwellers spend less time outdoors?','Should governments invest more in parks?']],
+['Describe a goal you are working towards',['what the goal is','why you set it','what you are doing to achieve it','and how you will feel when you achieve it'],['Is it important to set long-term goals?','Why do many people give up on their goals?']],
+['Describe a festival or celebration in your country',['what it is called','when it takes place','what people do','and why it is important'],['Are traditional celebrations losing their meaning?','Should public holidays be religious or national?']],
+['Describe some useful advice you received',['who gave it','what the advice was','when you received it','and why it was useful'],['Do people prefer advice from friends or from experts?','Is online advice trustworthy?']],
+['Describe a building you find interesting',['where it is','what it looks like','what it is used for','and why you find it interesting'],['Should old buildings be preserved or replaced?','How does architecture affect people’s mood?']],
+['Describe a video you watched online that you still remember',['what it was about','where you watched it','why you watched it','and why you remember it'],['Why do some videos go viral?','Should social media platforms control what people post?']],
+['Describe a time you had to wait for something',['what you were waiting for','how long you waited','what you did while waiting','and how you felt'],['Are people less patient than in the past?','In what situations is waiting a good thing?']],
+['Describe a family tradition',['what it is','when it happens','who takes part','and why it matters to your family'],['How have family roles changed in your country?','Should children be taught family history?']],
+['Describe a change in your city in recent years',['what changed','when it happened','how it affected people','and how you feel about it'],['What makes a city a good place to live?','Who should pay for improvements to public transport?']],
+['Describe a time you were very busy',['when it was','why you were busy','what you had to do','and how you managed'],['Is being busy a sign of success?','How can employers reduce stress at work?']],
+['Describe a book or article that changed your opinion',['what it was','when you read it','what it was about','and how it changed your view'],['Do people read less than they used to?','Should schools choose what students read?']]
+];
+
+/* ---------- UI shell ---------- */
+const TABS=[['today','Сегодня'],['mocks','Моки'],['writing','Writing'],['mist','Ошибки'],['vocab','Слова'],['speak','Speaking'],['set','Настройки']];
+let tab='today', viewDate=todayStr();
+const V={};
+function renderTabs(){ $('#tabs').innerHTML=TABS.map(([k,n])=>`<button class="${k===tab?'on':''}" data-t="${k}">${n}</button>`).join(''); }
+$('#tabs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;tab=b.dataset.t;renderTabs();build();window.scrollTo(0,0);});
+function build(){ $('#main').onclick=null; $('#main').innerHTML=V[tab].build(); V[tab].init&&V[tab].init(); refresh(); }
+function refresh(){ const v=V[tab]; v&&v.refresh&&v.refresh(); }
+const tagc=s=>`<span class="tag" style="background:var(--${s})">${s==='X'?'★':s==='V'?'Voc':s}</span>`;
+
+/* ---------- TODAY ---------- */
+V.today={
+ build:()=>`<div id="tdyn"></div>`,
+ refresh(){
+  const st=settings(), t=todayStr(), dLeft=daysBetween(t,st.examDate);
+  const total=Math.max(0,daysBetween(st.start,st.examDate)), passed=Math.min(total,Math.max(0,daysBetween(st.start,t)+1));
+  let goodDays=0; for(let ds=st.start; ds<=t && ds<st.examDate; ds=addDays(ds,1)) if(dayStats(ds).ratio>=0.8) goodDays++;
+  const s=dayStats(viewDate); const isT=viewDate===t;
+  const lt=latest(); const tg={L:st.tL,R:st.tR,W:st.tW,S:st.tS};
+  // week strip
+  const dt=parseD(viewDate); const mon=addDays(viewDate,-((dt.getDay()+6)%7));
+  let week=''; for(let i=0;i<7;i++){const ds=addDays(mon,i); const r=dayStats(ds); const cls=r.ratio>=0.8?'f':r.ratio>0?'p':''; week+=`<div class="wd">${['Пн','Вт','Ср','Чт','Пт','Сб','Вс'][i]}<div class="sq ${cls} ${ds===viewDate?'t':''}" data-go="${ds}">${parseD(ds).getDate()}</div></div>`;}
+  const gap=['L','R','W','S'].map(k=>{const v=lt[k]; const need=v==null?null:+(tg[k]-v).toFixed(1); return `<div class="cell"><div class="k" style="color:var(--${k})">${k}</div><div class="v">${fx(v)}</div><div class="s ${need>0?'up':need!=null?'okc':''}">${need==null?'нет данных':need>0?'+'+need.toFixed(1)+' до '+tg[k]:'цель ✓'}</div></div>`;}).join('');
+  const have=['L','R','W','S'].every(k=>lt[k]!=null);
+  $('#tdyn').innerHTML=`
+  <section class="card hero">
+    <div class="row"><div><small>до экзамена</small><div class="big num">${Math.max(0,dLeft)}</div><small>${plural(dLeft,'день','дня','дней')} · ${fmtD(st.examDate,{day:'numeric',month:'long',year:'numeric'})}</small></div>
+    <div style="text-align:right"><small>цель</small><div class="num" style="font-size:30px;font-weight:700">${overallBand([st.tL,st.tR,st.tW,st.tS]).toFixed(1)}</div><small>L${st.tL} R${st.tR} W${st.tW} S${st.tS}</small></div></div>
+    <div class="stats">
+      <div class="stat"><div class="v num">${streak()}</div><div class="k">стрик, дней</div></div>
+      <div class="stat"><div class="v num">${goodDays}/${passed}</div><div class="k">дней по плану</div></div>
+      <div class="stat"><div class="v num">${have?overallBand(['L','R','W','S'].map(k=>lt[k])).toFixed(1):'—'}</div><div class="k">последний overall</div></div>
+    </div>
+  </section>
+  <section class="card">
+    <div class="datenav"><button data-nav="-1" aria-label="Предыдущий день">‹</button><div class="d">${isT?'Сегодня · ':''}${fmtD(viewDate)}</div><button data-nav="1" aria-label="Следующий день">›</button></div>
+    <div class="week">${week}</div>
+  </section>
+  <section class="card">
+    <span class="pill">${esc(s.p.name)}</span>
+    <p class="mute" style="margin:8px 0 10px">${esc(s.p.focus)}</p>
+    ${s.p.tasks.length?`<div class="bar"><i style="width:${Math.round(s.ratio*100)}%"></i></div>
+    <div class="mute" style="margin-top:6px;display:flex;justify-content:space-between"><span class="num">${s.dm} / ${s.tot} мин</span><span>${s.ratio>=0.8?'день засчитан ✓':'засчитывается от 80%'}</span></div>`:''}
+    <div style="margin-top:6px">${s.p.tasks.map((t,i)=>`
+      <div class="task ${s.done.has(i)?'done':''}" data-i="${i}">
+        <div class="cb"></div>
+        <div style="flex:1;min-width:0"><div class="tt">${tagc(t.sec)}${esc(t.title)}</div>${t.how?`<div class="how">${esc(t.how)}</div>`:''}</div>
+        <div class="min">${t.min>1?t.min+'′':''}</div>
+      </div>`).join('')}</div>
+  </section>
+  <section class="card">
+    <h2>Разрыв до цели</h2>
+    <div class="grid4">${gap}</div>
+    <p class="mute" style="margin-top:8px">${lt.Wai!=null?'Последняя оценка эссе Task 2: <b class="num">'+fx(lt.Wai)+'</b>. ':''}Цифры — из вкладки «Моки». 8.5 = средний балл от 8.25.</p>
+  </section>
+  ${inTG?`<section class="card"><h2>Отчёт за день</h2><p class="mute">Нажми вечером: отчёт уйдёт боту, приложение закроется. Утром я его разберу и пришлю задание.</p><button class="btn y" id="sendRep">📤 Сдать день боту</button></section>`:''}`;
+ },
+ init(){
+  $('#main').onclick=e=>{
+   const n=e.target.closest('[data-nav]'); if(n){viewDate=addDays(viewDate,+n.dataset.nav);refresh();return;}
+   const g=e.target.closest('[data-go]'); if(g){viewDate=g.dataset.go;refresh();return;}
+   if(e.target.closest('#sendRep')){ const r=JSON.stringify(buildReport()); try{ TG.sendData(r); }catch(err){ toast('Открой приложение кнопкой «📚 IELTS 8.5» под полем ввода в чате — тогда отчёт уйдёт'); } return; }
+   const t=e.target.closest('.task'); if(t){
+     const i=+t.dataset.i; const s=dayStats(viewDate); const done=new Set(s.done); done.has(i)?done.delete(i):done.add(i);
+     let dm=0; s.p.tasks.forEach((x,j)=>{if(done.has(j))dm+=x.min;});
+     put('ielts_days',viewDate,{done:[...done].sort((a,b)=>a-b),doneMin:dm,totalMin:s.tot,phase:s.p.key,ts:Date.now()});
+     hap();
+     if(s.tot&&dm/s.tot>=0.8&&s.ratio<0.8){ setTimeout(()=>{hap('ok');toast('День засчитан. Стрик: '+streak());},50); }
+   }
+  };
+ }
+};
+
+function buildReport(){
+  const st=settings(), t=todayStr(); const wk=[];
+  for(let i=6;i>=0;i--){const ds=addDays(t,-i); const s=dayStats(ds); wk.push([ds.slice(5),s.dm,s.tot]);}
+  const lt=latest(); const since=addDays(t,-14); const cnt={};
+  Object.values(S.ielts_mistakes).filter(m=>m.date>=since).forEach(m=>{const k=m.sec+':'+m.type;cnt[k]=(cnt[k]||0)+1;});
+  const es=Object.values(S.ielts_essays).filter(e=>e.result).sort((a,b)=>(b.ts||0)-(a.ts||0)).slice(0,3).map(e=>[e.date.slice(5),e.task,e.result.ta_tr,e.result.cc,e.result.lr,e.result.gra,e.result.band]);
+  const ms=mocksSorted().slice(-3).map(m=>[m.date.slice(5),m.L,m.R,m.W,m.S,m.overall??null]);
+  const it=vocab(); const today=dayStats(t);
+  return {v:1,d:t,exam:st.examDate,left:daysBetween(t,st.examDate),ph:today.p.key,dm:today.dm,tot:today.tot,streak:streak(),wk,last:[lt.L,lt.R,lt.W,lt.S],tg:[st.tL,st.tR,st.tW,st.tS],mocks:ms,ess:es,mist:Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,5),voc:[it.length,it.filter(x=>(x.box||0)>=4).length,it.filter(x=>x.due<=t).length]};
+}
+
+/* ---------- MOCKS ---------- */
+const bandOpts=(sel)=>['','4','4.5','5','5.5','6','6.5','7','7.5','8','8.5','9'].map(v=>`<option value="${v}" ${String(sel)===v?'selected':''}>${v||'—'}</option>`).join('');
+V.mocks={
+ build:()=>{const st=settings();return `
+ <section class="card"><h2>Новый результат</h2>
+  <div class="row2"><div><label>Дата</label><input type="date" id="mDate" value="${todayStr()}"></div>
+  <div><label>Источник</label><input id="mSrc" placeholder="Cambridge 19 Test 2"></div></div>
+  <div class="row2"><div><label>Listening, верных из 40</label><input id="mL" type="number" min="0" max="40" inputmode="numeric"></div>
+  <div><label>Reading, верных из 40</label><input id="mR" type="number" min="0" max="40" inputmode="numeric"></div></div>
+  <div class="row2"><div><label>Writing, балл</label><select id="mW">${bandOpts('')}</select></div>
+  <div><label>Speaking, балл</label><select id="mS">${bandOpts('')}</select></div></div>
+  <div class="mute" id="mConv" style="margin-top:8px">Заполни только то, что сдавал.</div>
+  <button class="btn" id="mSave">Сохранить</button>
+ </section>
+ <div id="mdyn"></div>`;},
+ init(){
+  const st=settings();
+  const calc=()=>{const L=$('#mL').value,R=$('#mR').value;const p=[];if(L!=='')p.push('L = <b class="num">'+conv(LIS,+L).toFixed(1)+'</b>');if(R!=='')p.push('R = <b class="num">'+conv(st.module==='Academic'?RAC:RGT,+R).toFixed(1)+'</b>');$('#mConv').innerHTML=p.length?p.join(' · '):'Заполни только то, что сдавал.';};
+  $('#mL').oninput=calc;$('#mR').oninput=calc;
+  $('#mSave').onclick=()=>{
+   const L=$('#mL').value,R=$('#mR').value,W=$('#mW').value,Sv=$('#mS').value;
+   if(L===''&&R===''&&W===''&&Sv===''){toast('Введи хотя бы одну секцию');return;}
+   if((L!==''&&(+L<0||+L>40))||(R!==''&&(+R<0||+R>40))){toast('Сырой балл — от 0 до 40');return;}
+   const m={date:$('#mDate').value||todayStr(),src:$('#mSrc').value.trim(),ts:Date.now(),
+    lRaw:L===''?null:+L,rRaw:R===''?null:+R,
+    L:L===''?null:conv(LIS,+L),R:R===''?null:conv(st.module==='Academic'?RAC:RGT,+R),
+    W:W===''?null:+W,S:Sv===''?null:+Sv};
+   if([m.L,m.R,m.W,m.S].every(v=>v!=null)) m.overall=overallBand([m.L,m.R,m.W,m.S]);
+   put('ielts_mocks',uid(),m);
+   ['mL','mR','mSrc'].forEach(i=>$('#'+i).value='');$('#mW').value='';$('#mS').value='';calc();toast('Сохранено');
+  };
+  $('#main').onclick=e=>{const x=e.target.closest('[data-delm]');if(x){del('ielts_mocks',x.dataset.delm);}};
+ },
+ refresh(){
+  const st=settings(); const ms=mocksSorted(); const tg={L:st.tL,R:st.tR,W:st.tW,S:st.tS};
+  const best={},last={}; ms.forEach(m=>['L','R','W','S'].forEach(k=>{if(m[k]!=null){last[k]=m[k];best[k]=Math.max(best[k]||0,m[k]);}}));
+  $('#mdyn').innerHTML=`
+  <section class="card"><h2>Динамика</h2>${ms.length?chart(ms,st):'<p class="mute">Пока нет результатов. Первый — сегодняшняя диагностика.</p>'}</section>
+  <section class="card"><h2>Цель / последний / лучший</h2>
+   <div class="grid4">${['L','R','W','S'].map(k=>`<div class="cell"><div class="k" style="color:var(--${k})">${k}</div><div class="v">${fx(last[k])}</div><div class="s">цель ${tg[k]} · лучш. ${fx(best[k])}</div></div>`).join('')}</div>
+  </section>
+  <section class="card"><h2>История</h2><div class="list">${ms.length?ms.slice().reverse().map(m=>`
+   <div class="it"><div style="flex:1"><div style="font-weight:700">${fmtD(m.date,{day:'numeric',month:'short'})}${m.src?' · '+esc(m.src):''}</div>
+   <div class="num" style="font-size:13px;margin-top:2px">${['L','R','W','S'].filter(k=>m[k]!=null).map(k=>`<span style="color:var(--${k})">${k}</span> ${fx(m[k])}${k==='L'&&m.lRaw!=null?' ('+m.lRaw+')':''}${k==='R'&&m.rRaw!=null?' ('+m.rRaw+')':''}`).join(' · ')}${m.overall!=null?' · <b>Overall '+fx(m.overall)+'</b>':''}</div></div>
+   <button class="x" data-delm="${m.id}" aria-label="Удалить">×</button></div>`).join(''):'<p class="mute">—</p>'}</div></section>`;
+ }
+};
+function chart(ms,st){
+  const W=340,H=190,p={l:30,r:12,t:12,b:24}; const lo=5,hi=9;
+  const n=ms.length; const x=i=>p.l+(n<2?(W-p.l-p.r)/2:i*(W-p.l-p.r)/(n-1));
+  const y=v=>p.t+(hi-Math.max(lo,Math.min(hi,v)))/(hi-lo)*(H-p.t-p.b);
+  let g=''; for(let v=lo;v<=hi;v++){g+=`<line x1="${p.l}" x2="${W-p.r}" y1="${y(v)}" y2="${y(v)}" stroke="#ECE8DF"/><text x="${p.l-8}" y="${y(v)+4}" font-size="10" text-anchor="end" fill="#8A877F" font-family="JetBrains Mono">${v}</text>`;}
+  const tgt=overallBand([st.tL,st.tR,st.tW,st.tS]);
+  g+=`<line x1="${p.l}" x2="${W-p.r}" y1="${y(tgt)}" y2="${y(tgt)}" stroke="#16161A" stroke-dasharray="4 4"/><text x="${W-p.r}" y="${y(tgt)-4}" font-size="10" text-anchor="end" fill="#16161A" font-family="JetBrains Mono">цель ${tgt}</text>`;
+  const ser=[['L','#2F6FEB'],['R','#15803D'],['W','#E2561B'],['S','#8B3FD9'],['overall','#16161A']];
+  ser.forEach(([k,c])=>{const pts=ms.map((m,i)=>m[k]!=null?[x(i),y(m[k])]:null).filter(Boolean); if(!pts.length)return;
+    g+=`<polyline fill="none" stroke="${c}" stroke-width="${k==='overall'?3:2}" stroke-linejoin="round" points="${pts.map(q=>q.join(',')).join(' ')}"/>`+pts.map(q=>`<circle cx="${q[0]}" cy="${q[1]}" r="3.2" fill="${c}"/>`).join('');});
+  [0,n-1].filter((v,i,a)=>a.indexOf(v)===i&&v>=0).forEach(i=>{g+=`<text x="${x(i)}" y="${H-6}" font-size="10" text-anchor="${n<2?'middle':i===0?'start':'end'}" fill="#8A877F">${fmtD(ms[i].date,{day:'numeric',month:'short'})}</text>`;});
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="График баллов">${g}</svg>
+  <div class="legend"><span style="color:#2F6FEB">L</span><span style="color:#15803D">R</span><span style="color:#E2561B">W</span><span style="color:#8B3FD9">S</span><span style="color:#16161A">Overall</span></div>`;
+}
+
+/* ---------- WRITING ---------- */
+let wTask='T2', wTimer=null, wLeft=0;
+const wc=s=>(s.trim().match(/\S+/g)||[]).length;
+function draft(){try{return JSON.parse(localStorage.getItem('ielts85_draft')||'{}');}catch(e){return {};}}
+function saveDraft(){try{localStorage.setItem('ielts85_draft',JSON.stringify({task:wTask,prompt:$('#wP').value,essay:$('#wE').value}));}catch(e){}}
+const critOpts=()=>['','4','4.5','5','5.5','6','6.5','7','7.5','8','8.5','9'].map(v=>`<option value="${v}">${v||'—'}</option>`).join('');
+V.writing={
+ build:()=>{const d=draft(); if(d.task) wTask=d.task; return `
+ <section class="card"><h2>Эссе → проверка в Claude</h2>
+  <div class="seg" id="wSeg"><button data-k="T2" class="${wTask==='T2'?'on':''}">Task 2 · 40 мин</button><button data-k="T1" class="${wTask==='T1'?'on':''}">Task 1 · 20 мин</button></div>
+  <label>Задание (вставь формулировку)</label><textarea id="wP" rows="3" placeholder="Some people believe that...">${esc(d.prompt||'')}</textarea>
+  <label style="display:flex;justify-content:space-between"><span>Твой текст</span><span class="num" id="wCnt"></span></label>
+  <textarea id="wE" rows="12" placeholder="Пиши здесь или вставь готовый текст">${esc(d.essay||'')}</textarea>
+  <div class="row2"><button class="btn g" id="wTim">⏱ Таймер</button><button class="btn y" id="wGo">Проверить в Claude</button></div>
+  <div class="note">Откроется Claude с готовым заданием для экзаменатора, текст ещё и скопируется. Разбор пойдёт по 4 критериям, в конце будет строка с баллами — внеси их ниже.</div>
+ </section>
+ <section class="card"><h2>Внести оценку</h2>
+  <div class="grid4">${[['wa',wTask==='T1'?'TA':'TR'],['wb','CC'],['wc','LR'],['wd','GRA']].map(([i,k])=>`<div><label id="${i}L">${k}</label><select id="${i}">${critOpts()}</select></div>`).join('')}</div>
+  <p class="mute" id="wBand" style="margin-top:8px"></p>
+  <button class="btn" id="wSave">Сохранить эссе с оценкой</button>
+ </section>
+ <div id="wdyn"></div>`;},
+ init(){
+  const cnt=()=>{const n=wc($('#wE').value),min=wTask==='T1'?150:250;$('#wCnt').innerHTML=`<span style="color:${n>=min?'var(--ok)':'var(--bad)'}">${n}</span> / ${min}+`;};
+  const band=()=>{const v=['wa','wb','wc','wd'].map(i=>$('#'+i).value);if(v.some(x=>x==='')){$('#wBand').textContent='Выбери все 4 балла.';return null;}const b=Math.floor(v.reduce((a,x)=>a+ +x,0)/4*2)/2;$('#wBand').innerHTML='Балл за задание: <b class="num" style="color:var(--W)">'+b.toFixed(1)+'</b>';return b;};
+  cnt(); band();
+  ['wa','wb','wc','wd'].forEach(i=>$('#'+i).onchange=band);
+  $('#wE').oninput=()=>{cnt();clearTimeout(saveDraft.t);saveDraft.t=setTimeout(saveDraft,500);};
+  $('#wP').oninput=()=>{clearTimeout(saveDraft.t);saveDraft.t=setTimeout(saveDraft,500);};
+  $('#wSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;wTask=b.dataset.k;[...$('#wSeg').children].forEach(x=>x.classList.toggle('on',x===b));$('#waL').textContent=wTask==='T1'?'TA':'TR';cnt();saveDraft();};
+  const showT=()=>{$('#wTim').textContent=wTimer?`⏹ ${Math.floor(wLeft/60)}:${pad(wLeft%60)}`:'⏱ Таймер';};
+  showT();
+  $('#wTim').onclick=()=>{
+   if(wTimer){clearInterval(wTimer);wTimer=null;showT();return;}
+   wLeft=(wTask==='T1'?20:40)*60;
+   wTimer=setInterval(()=>{wLeft--; const b=$('#wTim'); if(wLeft<=0){clearInterval(wTimer);wTimer=null;hap('ok');toast('Время вышло — проверь текст');} if(b) showT();},1000); showT();
+  };
+  $('#wGo').onclick=()=>{
+   const essay=$('#wE').value.trim(); if(wc(essay)<60){toast('Текст слишком короткий для оценки');return;}
+   const pr=examinerPrompt(wTask,$('#wP').value.trim(),essay); copyText(pr);
+   const u='https://claude.ai/new?q='+encodeURIComponent(pr);
+   try{ inTG?TG.openLink(u.length<14000?u:'https://claude.ai/new'):window.open(u.length<14000?u:'https://claude.ai/new','_blank'); }catch(e){}
+   toast('Задание скопировано — если поле в Claude пустое, просто вставь');
+  };
+  $('#wSave').onclick=()=>{
+   const essay=$('#wE').value.trim(); const b=band(); if(b==null){toast('Выбери все 4 балла');return;}
+   const r={ta_tr:+$('#wa').value,cc:+$('#wb').value,lr:+$('#wc').value,gra:+$('#wd').value,band:b};
+   put('ielts_essays',uid(),{date:todayStr(),ts:Date.now(),task:wTask,prompt:$('#wP').value.trim(),essay,words:wc(essay),result:r});
+   ['wa','wb','wc','wd'].forEach(i=>$('#'+i).value='');$('#wE').value='';$('#wP').value='';saveDraft();cnt();band();hap('ok');toast('Сохранено: '+b.toFixed(1));
+  };
+  $('#main').onclick=e=>{const x=e.target.closest('[data-dele]');if(x){del('ielts_essays',x.dataset.dele);}};
+ },
+ refresh(){
+  const es=Object.entries(S.ielts_essays).map(([id,e])=>({id,...e})).sort((a,b)=>(b.ts||0)-(a.ts||0));
+  const t2=es.filter(e=>e.task==='T2'&&e.result).slice(0,5); const avg=t2.length?t2.reduce((s,e)=>s+(+e.result.band||0),0)/t2.length:null;
+  const crit=t2.length?['ta_tr','cc','lr','gra'].map(k=>[k,t2.reduce((s,e)=>s+(+e.result[k]||0),0)/t2.length]):[];
+  const weak=crit.length?crit.slice().sort((a,b)=>a[1]-b[1])[0]:null; const nm={ta_tr:'TR',cc:'CC',lr:'LR',gra:'GRA'};
+  $('#wdyn').innerHTML=`<section class="card"><h2>История эссе</h2>
+   ${avg!=null?`<p class="mute">Средний Task 2 за последние ${t2.length}: <b class="num" style="color:var(--ink)">${avg.toFixed(2)}</b>${weak?` · слабее всего <b style="color:var(--ink)">${nm[weak[0]]} ${weak[1].toFixed(1)}</b>`:''}</p>`:''}
+   ${es.length?es.map(e=>`<details><summary><span>${fmtD(e.date,{day:'numeric',month:'short'})} · ${e.task==='T1'?'Task 1':'Task 2'} · ${e.words} сл.</span><span class="num" style="color:var(--W)">${e.result?fx(e.result.band):'—'}</span></summary>
+     ${e.result?`<p class="num" style="font-size:13px;margin:6px 0">${e.task==='T1'?'TA':'TR'} ${fx(e.result.ta_tr)} · CC ${fx(e.result.cc)} · LR ${fx(e.result.lr)} · GRA ${fx(e.result.gra)}</p>`:''}
+     <p class="mute" style="margin:6px 0">${esc((e.prompt||'').slice(0,160))}</p>
+     <details><summary class="mute">Текст эссе</summary><p style="white-space:pre-wrap;font-size:13.5px;margin-top:6px">${esc(e.essay)}</p></details>
+     <button class="btn g" data-dele="${e.id}">Удалить</button></details>`).join(''):'<p class="mute">Пока пусто.</p>'}
+  </section>`;
+ }
+};
+function copyText(t){
+  try{ if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t).catch(()=>fallbackCopy(t)); return; } }catch(e){}
+  fallbackCopy(t);
+}
+function fallbackCopy(t){ try{const a=document.createElement('textarea');a.value=t;a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();}catch(e){} }
+function examinerPrompt(task,prompt,essay){
+ const t1=task==='T1', min=t1?150:250;
+ return `Act as a senior, calibrated IELTS Writing examiner. Assess my Academic Writing ${t1?'Task 1':'Task 2'} response strictly against the official public band descriptors (${t1?'Task Achievement':'Task Response'}, Coherence and Cohesion, Lexical Resource, Grammatical Range and Accuracy). Do not inflate: give 8+ for a criterion only if it clearly meets the band 8 descriptor. Minimum length ${min} words. I am aiming for band 8.
+
+Answer in Russian (keep quoted English in English):
+1) Балл по каждому критерию с одной фразой обоснования.
+2) 3 правки с самым большим эффектом на балл.
+3) 3–5 моих предложений, переписанных на уровень 8–9.
+4) Что отделяет текст от следующего балла.
+Last line exactly: ИТОГ: ${t1?'TA':'TR'} x · CC x · LR x · GRA x
+
+TASK: ${prompt||'(not given — infer it from the response)'}
+
+MY RESPONSE (${wc(essay)} words):
+${essay}`;
+}
+
+/* ---------- MISTAKES ---------- */
+const QT={
+ R:['True/False/Not Given','Yes/No/Not Given','Matching headings','Matching information','Matching features','Matching sentence endings','Sentence completion','Summary completion','Multiple choice','Short answer','Diagram/flow-chart','Не хватило времени'],
+ L:['Form/note completion','Multiple choice','Map/plan','Matching','Sentence completion','Орфография/числа','Отвлекающий ответ (distractor)','Потерял место'],
+ W:['TR: позиция/развитие идей','TA: overview/данные','CC: связность/абзацы','LR: повторы/неточные слова','LR: орфография','GRA: ошибки','GRA: мало сложных структур','Время/объём'],
+ S:['Fluency: паузы','Pronunciation','LR: повторы','GRA: ошибки','Короткие ответы','Ушёл от вопроса']
+};
+const WHY=['Не нашёл в тексте','Неверно понял','Ловушка/синоним','Не знал слово','Спешка','Орфография'];
+let mSec='R';
+V.mist={
+ build:()=>`<section class="card"><h2>Записать ошибку</h2>
+  <div class="seg" id="xSeg">${['R','L','W','S'].map(k=>`<button data-k="${k}" class="${k===mSec?'on':''}">${SEC[k]}</button>`).join('')}</div>
+  <label>Тип</label><select id="xT"></select>
+  <label>Причина</label><select id="xW">${WHY.map(w=>`<option>${w}</option>`).join('')}<option>Другое</option></select>
+  <label>Заметка (что именно и правило на будущее)</label><input id="xN" placeholder="Например: “decline” ≠ “stagnate” → NG, а не False">
+  <button class="btn" id="xAdd">Добавить</button></section><div id="xdyn"></div>`,
+ init(){
+  const fill=()=>{$('#xT').innerHTML=QT[mSec].map(t=>`<option>${t}</option>`).join('');};fill();
+  $('#xSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;mSec=b.dataset.k;[...$('#xSeg').children].forEach(x=>x.classList.toggle('on',x===b));fill();};
+  $('#xAdd').onclick=()=>{put('ielts_mistakes',uid(),{date:todayStr(),ts:Date.now(),sec:mSec,type:$('#xT').value,why:$('#xW').value,note:$('#xN').value.trim()});$('#xN').value='';toast('Записано');};
+  $('#main').onclick=e=>{const x=e.target.closest('[data-delx]');if(x)del('ielts_mistakes',x.dataset.delx);};
+ },
+ refresh(){
+  const all=Object.entries(S.ielts_mistakes).map(([id,m])=>({id,...m})).sort((a,b)=>(b.ts||0)-(a.ts||0));
+  const since=addDays(todayStr(),-14); const rec=all.filter(m=>m.date>=since);
+  const cnt={}; rec.forEach(m=>{const k=m.sec+'|'+m.type;cnt[k]=(cnt[k]||0)+1;});
+  const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,8); const mx=top.length?top[0][1]:1;
+  const why={}; rec.forEach(m=>{why[m.why]=(why[m.why]||0)+1;}); const tw=Object.entries(why).sort((a,b)=>b[1]-a[1])[0];
+  $('#xdyn').innerHTML=`<section class="card"><h2>Фокус: последние 14 дней</h2>
+   ${top.length?top.map(([k,n])=>{const [s,t]=k.split('|');return `<div class="hbar"><span class="lb">${tagc(s)}${esc(t)}</span><span class="tr"><i style="width:${n/mx*100}%;background:var(--${s})"></i></span><span class="n">${n}</span></div>`;}).join('')+
+   `<div class="note">Главная причина: <b>${esc(tw[0])}</b> (${tw[1]}). Топ-1 тип — тренируй отдельным сетом 2 раза на этой неделе.</div>`:'<p class="mute">Записывай каждую ошибку после теста — через неделю здесь будет видно, где ты теряешь баллы.</p>'}</section>
+   <section class="card"><h2>Журнал <span class="mute num">(${all.length})</span></h2><div class="list">${all.slice(0,40).map(m=>`<div class="it"><div style="flex:1;min-width:0"><div style="font-weight:700;font-size:14px">${tagc(m.sec)}${esc(m.type)}</div><div class="mute">${fmtD(m.date,{day:'numeric',month:'short'})} · ${esc(m.why)}${m.note?' · '+esc(m.note):''}</div></div><button class="x" data-delx="${m.id}" aria-label="Удалить">×</button></div>`).join('')||'<p class="mute">—</p>'}</div></section>`;
+ }
+};
+
+/* ---------- VOCAB ---------- */
+let vRev=false;
+V.vocab={
+ build:()=>`<div id="vdyn"></div>
+  <section class="card"><h2>Добавить</h2>
+   <label>Слово / коллокация</label><input id="vT" placeholder="mitigate the impact of">
+   <label>Значение</label><input id="vM" placeholder="смягчить влияние">
+   <label>Пример (лучше — из своего эссе)</label><input id="vE" placeholder="">
+   <button class="btn" id="vAdd">Добавить</button></section>`,
+ init(){
+  $('#vAdd').onclick=()=>{const t=$('#vT').value.trim();if(!t){toast('Введи слово');return;}
+   const items=[...vocab(),{id:uid(),t,m:$('#vM').value.trim(),ex:$('#vE').value.trim(),box:0,due:todayStr(),added:todayStr()}];
+   saveVocab(items);['vT','vM','vE'].forEach(i=>$('#'+i).value='');toast('Добавлено');};
+  $('#main').onclick=e=>{
+   if(e.target.closest('#vShow')){vRev=true;refresh();return;}
+   const a=e.target.closest('[data-ans]'); if(a){
+     const items=vocab().map(x=>({...x})); const it=items.find(x=>x.id===a.dataset.id); if(!it)return;
+     const t=todayStr();
+     if(a.dataset.ans==='1'){it.box=Math.min(5,(it.box||0)+1);it.due=addDays(t,INT[it.box]);}else{it.box=1;it.due=addDays(t,1);}
+     const log={...((S.ielts_meta.vocab||{}).log||{})}; log[t]=(log[t]||0)+1;
+     vRev=false; saveVocab(items,{log}); return;}
+   if(e.target.closest('#vStarter')){const have=new Set(vocab().map(x=>x.t.toLowerCase()));const add=STARTER.filter(s=>!have.has(s[0].toLowerCase())).map(s=>({id:uid(),t:s[0],m:s[1],ex:s[2],box:0,due:todayStr(),added:todayStr()}));saveVocab([...vocab(),...add],{starter:true});toast('Добавлено '+add.length);return;}
+   const d=e.target.closest('[data-delv]'); if(d){saveVocab(vocab().filter(x=>x.id!==d.dataset.delv));}
+  };
+ },
+ refresh(){
+  const items=vocab(), t=todayStr(); const due=items.filter(x=>x.due<=t);
+  const done=(((S.ielts_meta.vocab||{}).log)||{})[t]||0; const c=due[0];
+  const byBox=[0,1,2,3,4,5].map(b=>items.filter(x=>(x.box||0)===b).length);
+  $('#vdyn').innerHTML=`<section class="card"><h2>Повторение <span class="mute num">· сегодня ${done} · осталось ${due.length}</span></h2>
+   ${c?`<div class="flash"><div class="term">${esc(c.t)}</div>${vRev?`<div class="mean">${esc(c.m)}</div>${c.ex?`<div class="ex">${esc(c.ex)}</div>`:''}`:'<div class="mute">Вспомни значение и придумай своё предложение вслух</div>'}</div>
+     ${vRev?`<div class="row2"><button class="btn g" data-ans="0" data-id="${c.id}">Не знал</button><button class="btn" data-ans="1" data-id="${c.id}">Знал</button></div>`:`<button class="btn y" id="vShow">Показать</button>`}`
+   :`<p class="mute">${items.length?'На сегодня всё повторено ✓':'Словарь пуст.'}</p>`}
+   ${!(S.ielts_meta.vocab||{}).starter?`<button class="btn g" id="vStarter">+ Стартовый набор: 30 коллокаций Band 8</button>`:''}
+   <div class="mute" style="margin-top:10px">Всего ${items.length} · выучено (уровень 4–5): ${byBox[4]+byBox[5]}</div></section>
+   ${items.length?`<section class="card"><details><summary><span>Словарь · ${items.length}</span><span class="mute">открыть</span></summary><div class="list">${items.slice().reverse().slice(0,60).map(x=>`<div class="it"><div style="flex:1;min-width:0"><b>${esc(x.t)}</b> — ${esc(x.m)}<div class="mute">ур. ${x.box||0} · след. ${fmtD(x.due,{day:'numeric',month:'short'})}</div></div><button class="x" data-delv="${x.id}" aria-label="Удалить">×</button></div>`).join('')}</div></details></section>`:''}`;
+ }
+};
+
+/* ---------- SPEAKING ---------- */
+let cueI=Math.floor(Math.random()*CUES.length), sT=null, sLeft=0, sPhase='';
+V.speak={
+ build:()=>`<section class="card"><h2>Part 2 · карточка</h2><div id="cue"></div>
+   <div class="timer num" id="sTm">2:00</div><div class="mute" style="text-align:center" id="sPh">1 мин подготовка → 2 мин речь. Включи диктофон на телефоне.</div>
+   <div class="row2"><button class="btn g" id="sNew">Другая карточка</button><button class="btn y" id="sGo">Старт</button></div></section>
+  <section class="card"><h2>Чек-лист Band 8 после записи</h2><div class="list">
+   ${['Говорил все 2 минуты, без длинных пауз','Минимум 2 идиоматичные фразы к месту (не заученные)','Есть сложные предложения: условные, пассив, относительные','Не повторял одно слово больше 2 раз — использовал синонимы','Интонация: выделял ключевые слова, не монотонно','Ответы в Part 3 по схеме: ответ → причина → пример → оговорка'].map(t=>`<div class="it"><span>☐</span><span>${t}</span></div>`).join('')}</div></section>`,
+ init(){
+  const show=()=>{const c=CUES[cueI];$('#cue').innerHTML=`<div class="cue"><b>${esc(c[0])}.</b><div class="mute" style="margin-top:6px">You should say:</div><ul>${c[1].map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><h3>Part 3</h3>${c[2].map(q=>`<p style="font-size:14px;margin:4px 0">• ${esc(q)}</p>`).join('')}`;};
+  const draw=()=>{const e=$('#sTm');if(!e)return;e.textContent=`${Math.floor(sLeft/60)}:${pad(sLeft%60)}`;e.className='timer num '+(sPhase==='prep'?'prep':sPhase==='talk'?'talk':'');$('#sPh').textContent=sPhase==='prep'?'Подготовка: записывай ключевые слова':sPhase==='talk'?'Говори! Не останавливайся до сигнала':'1 мин подготовка → 2 мин речь. Включи диктофон на телефоне.';$('#sGo').textContent=sT?'Стоп':'Старт';};
+  show(); if(!sT){sLeft=120;} draw();
+  $('#sNew').onclick=()=>{cueI=(cueI+1+Math.floor(Math.random()*(CUES.length-1)))%CUES.length;show();};
+  $('#sGo').onclick=()=>{
+   if(sT){clearInterval(sT);sT=null;sPhase='';sLeft=120;draw();return;}
+   sPhase='prep';sLeft=60;draw();
+   sT=setInterval(()=>{sLeft--; if(sLeft<=0){ if(sPhase==='prep'){sPhase='talk';sLeft=120;toast('Говори!');} else {clearInterval(sT);sT=null;sPhase='';sLeft=0;toast('2 минуты — стоп. Переслушай запись.');} } draw();},1000);
+  };
+ }
+};
+
+/* ---------- SETTINGS ---------- */
+V.set={
+ build:()=>{const st=settings();return `<section class="card"><h2>Экзамен и цели</h2>
+  <div class="row2"><div><label>Дата экзамена</label><input type="date" id="sE" value="${st.examDate}"></div><div><label>Старт плана</label><input type="date" id="sSt" value="${st.start}"></div></div>
+  <label>Модуль</label><select id="sMod"><option ${st.module==='Academic'?'selected':''}>Academic</option><option value="General" ${st.module==='General'?'selected':''}>General Training</option></select>
+  <h3>Цель по секциям</h3>
+  <div class="grid4">${['L','R','W','S'].map(k=>`<div><label style="color:var(--${k})">${k}</label><select id="t${k}">${bandOpts(st['t'+k]).replace('<option value="" >—</option>','')}</select></div>`).join('')}</div>
+  <p class="mute" id="sOv" style="margin-top:8px"></p>
+  <button class="btn" id="sSave">Сохранить</button></section>
+  <section class="card"><h2>Как устроен план</h2><p class="mute">Фаза 1 «Фундамент» → Фаза 2 «Интенсив» (за 48 дней до экзамена) → Фаза 3 «Моки» (за 24 дня) → разгрузка (последние 4 дня). День засчитывается, если выполнено ≥80% минут. Дату можно поменять — план пересчитается.</p>
+  <p class="mute" style="margin-top:8px">Данные хранятся в облаке Telegram и видны на всех твоих устройствах. Материалы: Cambridge IELTS 15–19 (Academic), <a href="https://ielts.org/take-a-test/preparation-resources" target="_blank" rel="noopener">ielts.org</a>, <a href="https://engnovate.com" target="_blank" rel="noopener">engnovate.com</a>.</p></section>`;},
+ init(){
+  const ov=()=>{const v=['L','R','W','S'].map(k=>+$('#t'+k).value);$('#sOv').innerHTML=v.some(isNaN)?'':`Overall по этим целям: <b class="num">${overallBand(v).toFixed(1)}</b> (среднее ${(v.reduce((a,b)=>a+b,0)/4).toFixed(3)})`;};
+  ['L','R','W','S'].forEach(k=>$('#t'+k).onchange=ov);ov();
+  $('#sSave').onclick=()=>{const e=$('#sE').value,s=$('#sSt').value;if(!e||!s||s>=e){toast('Проверь даты');return;}
+   const o={examDate:e,start:s,module:$('#sMod').value==='General'?'General':'Academic'};['L','R','W','S'].forEach(k=>o['t'+k]=+$('#t'+k).value||DEF['t'+k]);
+   put('ielts_meta','settings',o);toast('Сохранено');};
+ }
+};
+
+renderTabs(); build();
+</script>
+</body>
+</html>
