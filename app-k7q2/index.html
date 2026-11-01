@@ -67,6 +67,13 @@ ul.rep{margin:0;padding-left:18px}ul.rep li{margin:6px 0;font-size:14px}
 #send{position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));display:none;background:var(--lime);color:#14101F;font-size:16px;padding:15px;border-radius:16px;box-shadow:0 8px 24px #17142a33;z-index:9}
 .empty{color:var(--dim);font-size:14px;padding:8px 0}
 .note{background:#FFF4DC;border:1px solid #F1D08A;color:#7A4E00;border-radius:12px;padding:10px 12px;font-size:13px;margin:8px 0}
+.dl{display:flex;gap:12px}
+.dl img{width:84px;height:149px;object-fit:cover;border-radius:10px;border:1px solid var(--line);flex:0 0 84px;background:#110E1E}
+.dl .bb{display:flex;flex-direction:column;gap:6px;flex:1;min-width:0}
+.dl button{width:100%;text-align:left}
+pre.desc{white-space:pre-wrap;font:13px/1.45 -apple-system,Roboto,sans-serif;background:var(--card2);border-radius:12px;padding:10px;margin:10px 0 0;max-height:220px;overflow:auto}
+#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#17142A;color:#fff;padding:10px 16px;border-radius:999px;font-size:14px;opacity:0;transition:opacity .2s;z-index:20;pointer-events:none}
+#toast.on{opacity:1}
 .hide{display:none}
 </style>
 </head>
@@ -77,6 +84,7 @@ ul.rep{margin:0;padding-left:18px}ul.rep li{margin:6px 0;font-size:14px}
 </header>
 <main id="main"><div class="empty">Загрузка…</div></main>
 <button id="send"></button>
+<div id="toast"></div>
 <script>
 const tg = window.Telegram && Telegram.WebApp; if (tg) { tg.ready(); tg.expand(); try{tg.setHeaderColor('#F4F3F8');tg.setBackgroundColor('#F4F3F8')}catch(e){} }
 let D = null, TAB = 'today', Q = [];   // Q = queued actions, sent together
@@ -111,7 +119,7 @@ if (tg && tg.MainButton) tg.MainButton.onClick(sendAll);
 document.getElementById('send').onclick = sendAll;
 
 function tabs() {
-  const t = [['today', 'Сегодня', D.tasks.length], ['topics', 'Темы', D.topics.filter(x => !x.picked).length], ['videos', 'Видео', D.kpi.to_post], ['stats', 'Отчёт', 0]];
+  const t = [['today', 'Сегодня', D.tasks.length], ['topics', 'Темы', D.topics.filter(x => !x.picked).length], ['files', 'Скачать', D.videos.filter(v => v.files && v.stage !== 'posted').length], ['videos', 'Видео', 0], ['stats', 'Отчёт', 0]];
   document.getElementById('tabs').innerHTML = t.map(([k, n, c]) => `<div class="tab ${TAB === k ? 'on' : ''}" onclick="TAB='${k}';render();window.scrollTo(0,0)">${n}${c ? `<i>${c}</i>` : ''}</div>`).join('');
 }
 function kpi() {
@@ -178,9 +186,38 @@ function statsTab() {
   h += `</div><div class="legend">Данные Instagram через Windsor · обновлено ${esc(S.updated || '')}. Отчёт — каждые 3 дня.</div>`;
   return h;
 }
+function toast(t) { const e = document.getElementById('toast'); e.textContent = t; e.classList.add('on'); setTimeout(() => e.classList.remove('on'), 1800); }
+const ABS = p => new URL(p, location.href).href;
+function dl(path, name) {
+  const url = ABS(path);
+  try { if (tg && tg.downloadFile && tg.isVersionAtLeast && tg.isVersionAtLeast('8.0')) { tg.downloadFile({url, file_name: name}); return; } } catch (e) {}
+  if (tg && tg.platform !== 'unknown' && tg.openLink) { tg.openLink(url); return; }
+  const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+}
+function copyDesc(v) {
+  const t = (D.videos.find(x => x.v === v) || {}).desc || '';
+  const ok = () => { toast('Описание скопировано ✓'); try { tg && tg.HapticFeedback.notificationOccurred('success') } catch (e) {} };
+  const fb = () => { const ta = document.getElementById('d-' + v); ta.classList.remove('hide'); const r = document.createRange(); r.selectNodeContents(ta); const s = getSelection(); s.removeAllRanges(); s.addRange(r); try { document.execCommand('copy') && ok() } catch (e) { toast('Выдели текст и скопируй') } };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(ok, fb); else fb();
+}
+function filesTab() {
+  const L = D.videos.filter(v => v.files);
+  if (!L.length) return '<div class="empty">Готовых видео пока нет.</div>';
+  return '<div class="legend">Оригиналы без сжатия Telegram: видео MP4, обложка PNG и описание (5 хэштегов). Выкладывай в 18:00–21:00.</div>' + L.map(v => {
+    const f = v.files, nm = f.video.split('/').pop(), cn = f.cover.split('/').pop();
+    return `<div class="card"><div style="display:flex;justify-content:space-between;margin-bottom:8px"><b>${esc(v.v)} · ${esc(v.cover || v.slug)}</b><span class="stage" style="${v.stage === 'delivered' ? 'color:var(--gold)' : ''}">${v.stage === 'posted' ? 'Опубликовано' : 'Выложить'}</span></div>
+      <div class="dl"><img src="${esc(f.thumb)}" alt="" loading="lazy"><div class="bb">
+        <button class="b1" onclick="dl('${f.video}','${nm}')">⬇ Видео · ${f.mb} МБ</button>
+        <button class="b2" onclick="dl('${f.cover}','${cn}')">⬇ Обложка · ${f.cover_mb} МБ</button>
+        <button class="b2" onclick="copyDesc('${v.v}')">📋 Копировать описание</button>
+        ${v.stage === 'delivered' ? `<button class="b2 ${has('posted', v.v) ? 'on' : ''}" onclick="toggle('posted','${v.v}')">${has('posted', v.v) ? '✓ Выложил' : 'Отметить «Выложил»'}</button>` : ''}
+      </div></div>
+      <pre class="desc">${esc(v.desc)}</pre><textarea id="d-${v.v}" class="hide" readonly>${esc(v.desc)}</textarea></div>`;
+  }).join('');
+}
 function render() {
   if (!D) return; tabs(); document.getElementById('upd').innerHTML = `обновлено ${esc(D.updated)}<br>проверка ${esc((D.next_tick || '').slice(11, 16))}`;
-  document.getElementById('main').innerHTML = {today, topics: topicsTab, videos: videosTab, stats: statsTab}[TAB](); sendBtn();
+  document.getElementById('main').innerHTML = {today, topics: topicsTab, files: filesTab, videos: videosTab, stats: statsTab}[TAB](); sendBtn();
 }
 fetch('data.json?t=' + Date.now()).then(r => r.json()).then(d => { D = d; render(); }).catch(e => document.getElementById('main').innerHTML = '<div class="empty">Не удалось загрузить данные: ' + esc(e) + '</div>');
 </script>
