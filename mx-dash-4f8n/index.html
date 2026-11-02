@@ -325,6 +325,27 @@ Reklama: DM yoki @sadikova.pr</div>
 </script>
 </section>
 
+<!-- ВЫБРАННЫЕ -->
+<section id="s-picked" data-title="Выбранные">
+  <h2>Выбранные темы</h2>
+  <p class="lead">Сюда попадают только темы, которые Мухлиса выбрала и отправила в бот. По каждой показан статус и есть кнопка перехода к готовому сценарию.</p>
+  <!-- PICKED:START -->
+  <div class="card" id="picked-empty"><b>Пока ничего не выбрано.</b><div class="td" style="color:var(--ink2);font-size:14px;margin-top:4px">Вкладка «Истории» → «☆ Выбрать» → «Отправить ✈», или кнопки с номерами тем в боте. Сценарий появится в течение часа.</div></div>
+  <!-- PICKED:END -->
+</section>
+
+<!-- СЦЕНАРИЙ -->
+<section id="s-script" data-title="Сценарий">
+  <h2>Сценарий от и до</h2>
+  <p class="lead">Полный контент под выбранное видео: текст для съёмки по 5 шагам, кадры, текст на экране, музыка, описание, закреплённый комментарий, воронка ChatPlace и пост-бонус. <b>[В квадратных скобках]</b> — места для её реальных фактов: перед съёмкой заполнить.</p>
+  <!-- SCRIPT:START -->
+  <div class="card" id="script-empty"><b>Сценария пока нет.</b><div style="color:var(--ink2);font-size:14px;margin-top:4px">Появится здесь в течение часа после того, как тема будет выбрана.</div></div>
+  <!-- SCRIPT:END -->
+</section>
+<script>
+window.openScript=function(id){var t=[].slice.call(document.querySelectorAll('.tab')).filter(function(b){return b.textContent==='Сценарий'})[0];if(t)t.click();setTimeout(function(){var e=document.getElementById(id);if(e)e.scrollIntoView({behavior:'smooth',block:'start'})},60);};
+</script>
+
 <!-- ЗАДАЧИ -->
 <section id="s-tasks" data-title="Задачи">
   <h2>Задачи на эту неделю</h2>

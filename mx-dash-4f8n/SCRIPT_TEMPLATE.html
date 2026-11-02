@@ -1,0 +1,59 @@
+<!--
+Шаблоны для вкладок «Выбранные» и «Сценарий» дешборда (mx-dash-4f8n/index.html).
+Вставлять между маркерами <!-- PICKED:START --> ... <!-- PICKED:END --> и <!-- SCRIPT:START --> ... <!-- SCRIPT:END -->.
+При первой вставке удалить заглушки #picked-empty и #script-empty. Новые темы добавлять СВЕРХУ (самая свежая первой), старые не удалять.
+N = номер темы 1..10 из вкладки «Истории». Тексты для съёмки/подписи/ChatPlace — узбекский латиницей. Пояснения — русский.
+[квадратные скобки] = место для реальных фактов Мухлисы. Ничего не выдумывать о её жизни.
+-->
+
+<!-- ===== Карточка в «Выбранные» ===== -->
+<div class="card seg" id="picked-N">
+  <div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start">
+    <span class="tag">Тема N · выбрана ДД.ММ</span>
+    <span class="pill up">✅ Сценарий готов</span>   <!-- или: <span class="pill mid">✍️ Готовится</span> -->
+  </div>
+  <h3>НАЗВАНИЕ ТЕМЫ</h3>
+  <div class="hook2">ХУК</div>
+  <div class="funnel"><div class="frow"><span>🔑 Код</span><span><b>КОД</b> <span class="muted">/ КОД_КИРИЛЛИЦА</span></span></div>
+  <div class="frow"><span>🎁 Бонус</span>БОНУС</div></div>
+  <button class="pick" style="margin-top:10px" onclick="openScript('script-N')">Открыть сценарий →</button>
+</div>
+
+<!-- ===== Сценарий в «Сценарий» ===== -->
+<article id="script-N">
+  <div class="card seg"><span class="tag">Тема N · подготовлено ДД.ММ.ГГГГ</span><h3>НАЗВАНИЕ ТЕМЫ</h3>
+    <div class="hook2">ХУК</div>
+    <p class="muted" style="margin:8px 0 0">Длительность ~XX сек · формат: говорящая голова + вставки из прошлого в верхнем углу · субтитры + плашка шага</p></div>
+
+  <div class="card"><h3>🎬 Текст для съёмки (по 5 шагам)</h3>
+    <!-- повторить для 5 шагов: Хук / Нарастание / Второй конфликт / Кульминация / Развязка -->
+    <div class="day" style="grid-template-columns:64px 1fr"><div class="dt">0–3 с<span>1. Хук</span></div><div>
+      <div class="topic">Текст (узб.): «…»</div>
+      <div class="hook">Текст на экране (≤6 слов)</div>
+      <div class="cta">Кадр/вставка: …</div></div></div>
+  </div>
+
+  <div class="card"><h3>🎵 Музыка и монтаж</h3><ul class="clean"><li>…</li></ul></div>
+
+  <div class="card"><h3>✍️ Описание к Reels</h3><div class="bio">Первая строка — хук
+…
+👇 Kommentga «КОД» yozing</div></div>
+
+  <div class="card"><h3>📌 Закреплённый комментарий</h3><div class="bio">…</div></div>
+
+  <div class="card"><h3>🤖 Воронка ChatPlace</h3>
+    <div class="funnel">
+      <div class="frow"><span>Триггер</span>КОД, КОД_КИРИЛЛИЦА, строчные варианты</div>
+      <div class="frow"><span>Ответ ×3</span>1) … 2) … 3) …</div>
+      <div class="frow"><span>Карточка</span>«…» + кнопка «Olish 🎁»</div>
+      <div class="frow"><span>Подписка?</span>«…» + кнопка «Obuna bo'ldim ✅»</div>
+      <div class="frow"><span>Бонус</span>«…» + ссылка на пост в Telegram</div>
+    </div></div>
+
+  <div class="card"><h3>🎁 Пост-бонус для Telegram-канала</h3><div class="bio">…</div></div>
+
+  <div class="card"><h3>✅ Чек-лист перед публикацией</h3><ul class="clean">
+    <li>Заполнить все [скобки] реальными фактами</li><li>Пост-бонус опубликован в канале, ссылка вставлена в ChatPlace</li>
+    <li>Сценарий ChatPlace проверен с чужого аккаунта</li><li>После публикации — закрепить комментарий с кодом</li>
+    <li>Через 48 ч: комментарии с кодом, новые подписки, переходы в Telegram</li></ul></div>
+</article>
