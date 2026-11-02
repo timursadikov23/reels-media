@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mukhlisa · дешборд аккаунта</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{
+  color-scheme: light;
+  --bg:#f6f5f2; --card:#ffffff; --line:#e9e7e2; --ink:#16151a; --ink2:#55535c; --ink3:#8b8992;
+  --accent:#c2457a; --accent-soft:#fbeaf1; --series:#2a78d6; --series-soft:#cde2fb;
+  --good:#17804a; --good-bg:#e6f4ec; --bad:#c23b2e; --bad-bg:#fbe9e7; --warn:#a86a00; --warn-bg:#fdf3dc;
+  --r:16px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Inter,sans-serif;-webkit-font-smoothing:antialiased}
+body{padding-bottom:40px}
+.wrap{max-width:720px;margin:0 auto;padding:0 14px}
+header{padding:18px 0 10px;display:flex;gap:12px;align-items:center}
+.ava{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#f4b6cf,#c2457a);display:grid;place-items:center;color:#fff;font-weight:700;font-size:20px;flex:none}
+.h-name{font-weight:700;font-size:17px}
+.h-sub{color:var(--ink2);font-size:13px}
+nav{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:8px 0;border-bottom:1px solid var(--line)}
+.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:0 14px;max-width:720px;margin:0 auto}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink2);padding:7px 13px;border-radius:999px;font:600 13px/1 inherit;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+section{display:none;padding-top:14px}
+section.on{display:block}
+h2{font-size:20px;margin:6px 0 4px}
+h3{font-size:15px;margin:0 0 8px}
+.lead{color:var(--ink2);margin:0 0 14px;font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:12px}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px}
+.kpi .l{color:var(--ink2);font-size:12px}
+.kpi .v{font-size:22px;font-weight:700;letter-spacing:-.02em;margin:2px 0;font-variant-numeric:tabular-nums}
+.kpi .d{font-size:12px;color:var(--ink2)}
+.pill{display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:600;padding:2px 7px;border-radius:999px}
+.up{background:var(--good-bg);color:var(--good)} .down{background:var(--bad-bg);color:var(--bad)} .mid{background:var(--warn-bg);color:var(--warn)}
+ul.clean{margin:0;padding-left:18px} ul.clean li{margin:4px 0}
+.muted{color:var(--ink3);font-size:12px}
+.chart{position:relative}
+.chart svg{width:100%;height:auto;display:block;overflow:visible}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;font-size:12px;padding:6px 8px;border-radius:8px;white-space:nowrap;opacity:0;transition:opacity .1s;transform:translate(-50%,-110%)}
+.bars .row{display:grid;grid-template-columns:118px 1fr 64px;gap:8px;align-items:center;margin:7px 0;font-size:13px}
+.bars .lab{color:var(--ink2);line-height:1.2}
+.bars .track{height:14px;position:relative}
+.bars .fill{height:14px;background:var(--series);border-radius:0 4px 4px 0;min-width:3px}
+.bars .fill.soft{background:var(--series-soft)}
+.bars .val{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.cmp{display:grid;gap:10px}
+.cmp .pair{border:1px solid var(--line);border-radius:12px;padding:10px}
+.cmp .t{font-weight:600;font-size:13px;margin-bottom:4px}
+.post{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line)}
+.post:first-of-type{border-top:0}
+.post .n{width:22px;color:var(--ink3);font-weight:700;flex:none}
+.post .c{flex:1;min-width:0}
+.post .cap{font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.post .m{color:var(--ink2);font-size:12px;font-variant-numeric:tabular-nums}
+.post a{color:var(--accent);text-decoration:none;font-size:12px;font-weight:600;flex:none}
+.seg{border-left:3px solid var(--accent);padding-left:12px}
+.seg .tag{display:inline-block;background:var(--accent-soft);color:var(--accent);font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;margin-bottom:6px}
+.kv{margin:8px 0 0}
+.kv b{display:block;font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em;margin-top:8px}
+.err{display:flex;gap:10px}
+.err .num{width:28px;height:28px;border-radius:50%;background:var(--bad-bg);color:var(--bad);display:grid;place-items:center;font-weight:700;flex:none}
+.fix{background:var(--good-bg);border-radius:10px;padding:8px 10px;margin-top:8px;font-size:14px}
+.fix::before{content:"✓ Как исправить: ";font-weight:700;color:var(--good)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 11px;font:600 12px/1 inherit;color:var(--ink2);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.day{display:grid;grid-template-columns:52px 1fr;gap:10px;padding:11px 0;border-top:1px solid var(--line)}
+.day:first-child{border-top:0}
+.day .dt{font-weight:700;font-size:13px;line-height:1.2}
+.day .dt span{display:block;color:var(--ink3);font-weight:500;font-size:11px}
+.badges{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:4px}
+.b{font-size:11px;font-weight:700;padding:2px 7px;border-radius:6px;background:#f0eff3;color:var(--ink2)}
+.b.E{background:#eaf2fc;color:#1c5cab} .b.X{background:#e6f4ec;color:#17804a} .b.S{background:#fbeaf1;color:#a0315f}
+.day .topic{font-weight:600;font-size:14px}
+.day .hook{font-size:13px;margin-top:4px;background:#faf9f7;border-radius:8px;padding:6px 8px}
+.day .hook::before{content:"Хук: ";color:var(--ink3);font-weight:600}
+.day .cta{font-size:12px;color:var(--ink2);margin-top:4px}
+.day .cta::before{content:"CTA: ";font-weight:600}
+.task{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line);cursor:pointer}
+.task:first-child{border-top:0}
+.task input{width:20px;height:20px;accent-color:var(--accent);margin:1px 0 0;flex:none}
+.task.done .tt{text-decoration:line-through;color:var(--ink3)}
+.task .tt{font-weight:600;font-size:14px}
+.task .td{font-size:13px;color:var(--ink2)}
+.task .when{font-size:11px;font-weight:700;color:var(--accent)}
+.progress{height:8px;background:#eeece8;border-radius:99px;overflow:hidden;margin:6px 0 2px}
+.progress i{display:block;height:100%;background:var(--accent);border-radius:99px;width:0;transition:width .2s}
+.bio{background:#faf9f7;border:1px dashed #d8d5ce;border-radius:12px;padding:10px 12px;font-size:14px;white-space:pre-line}
+table.t{width:100%;border-collapse:collapse;font-size:13px}
+table.t td,table.t th{padding:6px 4px;border-top:1px solid var(--line);text-align:left}
+table.t th{color:var(--ink3);font-weight:600;font-size:12px}
+table.t td.r,table.t th.r{text-align:right;font-variant-numeric:tabular-nums}
+details summary{cursor:pointer;color:var(--accent);font-weight:600;font-size:13px;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="ava">M</div>
+  <div>
+    <div class="h-name">@mukhlisasadikova_</div>
+    <div class="h-sub">2 839 подписчиков · 104 публикации · данные Windsor на 2 ноября 2026</div>
+  </div>
+</header>
+</div>
+<nav><div class="tabs" role="tablist" id="tabs"></div></nav>
+<div class="wrap">
+
+<!-- ОБЗОР -->
+<section id="s-overview" data-title="Обзор">
+  <h2>Последние 30 дней</h2>
+  <p class="lead">С 3 октября по 1 ноября. Для сравнения: прошлый срез из Windsor, 21 июля – 19 августа.</p>
+  <div class="kpis">
+    <div class="kpi"><div class="l">Просмотры</div><div class="v">847 797</div><div class="d"><span class="pill down">▼ 45%</span> было 1,53 млн</div></div>
+    <div class="kpi"><div class="l">Новые подписчики</div><div class="v">+239</div><div class="d"><span class="pill down">▼ 68%</span> было +739</div></div>
+    <div class="kpi"><div class="l">Подписок на 1 000 просмотров</div><div class="v">0,28</div><div class="d"><span class="pill down">⚠ низко</span> цель — 1,0+</div></div>
+    <div class="kpi"><div class="l">Взаимодействия</div><div class="v">65 763</div><div class="d"><span class="pill up">✓ 7,8%</span> ER к просмотрам</div></div>
+    <div class="kpi"><div class="l">Репосты</div><div class="v">13 644</div><div class="d">главный двигатель охвата</div></div>
+    <div class="kpi"><div class="l">Сохранения</div><div class="v">4 394</div><div class="d"><span class="pill down">▼ 64%</span> 2-я половина месяца к 1-й</div></div>
+  </div>
+  <div class="card">
+    <h3>Просмотры по дням</h3>
+    <div class="chart" id="viewsChart"><div class="tip"></div></div>
+    <p class="muted">Пики 3–4, 12, 14–16 и 28 октября дали ролики-хиты. Без них просмотры держатся около 20 тыс. в день.</p>
+  </div>
+  <div class="card">
+    <h3>Главное в трёх пунктах</h3>
+    <ul class="clean">
+      <li><b>Охваты есть, подписок нет.</b> 848 тыс. просмотров дали 239 подписок. Люди смотрят скетч, заходят в профиль, видят «beauty» и не подписываются.</li>
+      <li><b>Всё решают первые 3 секунды.</b> Когда первые 3 секунды пролистывают меньше 35% зрителей, медиана — 112 тыс. просмотров. Когда 45% и больше — 5 тыс. Это 25 роликов из 62.</li>
+      <li><b>Публикаций стало меньше.</b> 24 ролика в августе, 24 в сентябре, 14 в октябре. С 28 октября — ни одного.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- КОНТЕНТ -->
+<section id="s-content" data-title="Контент">
+  <h2>Что работает, а что нет</h2>
+  <p class="lead">62 публикации за 90 дней, с 4 августа по 28 октября. Везде медиана просмотров: один вирусный ролик её не искажает.</p>
+  <div class="card">
+    <h3>Медиана просмотров по признакам</h3>
+    <div class="cmp" id="cmp"></div>
+  </div>
+  <div class="card">
+    <h3>Публикации по месяцам</h3>
+    <table class="t"><thead><tr><th>Месяц</th><th class="r">Роликов</th><th class="r">Медиана</th><th class="r">Сумма просмотров</th></tr></thead>
+    <tbody>
+      <tr><td>Август (с 4-го)</td><td class="r">24</td><td class="r">44 051</td><td class="r">2 283 675</td></tr>
+      <tr><td>Сентябрь</td><td class="r">24</td><td class="r">5 279</td><td class="r">1 370 894</td></tr>
+      <tr><td>Октябрь</td><td class="r">14</td><td class="r">16 057</td><td class="r">355 702</td></tr>
+    </tbody></table>
+    <p class="muted">13 роликов из 62 набрали больше 100 тыс., 30 — меньше 10 тыс. Хиты случаются, но повторяемого формата пока нет.</p>
+  </div>
+  <div class="card"><h3>Топ-6 по просмотрам</h3><div id="top"></div></div>
+  <div class="card"><h3>Топ по сохранениям (полезность)</h3><div id="saves"></div></div>
+  <div class="card"><h3>Провалы: чему не повторяться</h3><div id="flop"></div>
+    <p class="muted">Общее у провалов: в подписи только эмодзи или тег бренда, больше половины зрителей уходят в первые 3 секунды, неясно, о чём ролик.</p></div>
+</section>
+
+<!-- АУДИТОРИЯ -->
+<section id="s-aud" data-title="Аудитория">
+  <h2>Кто подписан</h2>
+  <p class="lead">Данные по всем подписчикам. Пол Instagram определил только у 907 из 2 840.</p>
+  <div class="kpis">
+    <div class="kpi"><div class="l">Женщины (где пол известен)</div><div class="v">81%</div><div class="d">734 из 907</div></div>
+    <div class="kpi"><div class="l">Возраст 18–34</div><div class="v">72%</div><div class="d">2 045 подписчиков</div></div>
+  </div>
+  <div class="card"><h3>Возраст</h3><div class="bars" id="ages"></div></div>
+  <div class="card"><h3>Топ городов</h3><div class="bars" id="cities"></div>
+    <p class="muted">Ташкент вместе с областью — около 17%, сам город — 2,8%. Основная аудитория — регионы: Янгиер, Навои, Турткуль, Ургенч. Для контента это значит: доступные цены и средства, которые можно купить в регионах. Брендам из Ташкента это нужно объяснять заранее.</p></div>
+</section>
+
+<!-- АУДИТ -->
+<section id="s-audit" data-title="Аудит профиля">
+  <h2>Жёсткий разбор профиля</h2>
+  <p class="lead">Промт 1. Шапка и подписи взяты из Windsor. Аватар и Highlights API не отдаёт — пришли скриншот, допишу этот раздел.</p>
+
+  <div class="card">
+    <h3>1. Первый экран: впечатление за 3 секунды</h3>
+    <ul class="clean">
+      <li><b>Имя «Influencer| Content creator» — потерянное поле.</b> По полю «Имя» работает поиск Instagram. Сейчас там слова, которые ищут бренды, а не подписчицы. Новый человек из шапки не понимает, что получит.</li>
+      <li><b>Шрифт «ʙᴇᴀᴜᴛʏ| ʟɪꜰᴇ| ʙʟᴏɢɢɪɴɢ».</b> Unicode-капитель плохо читается, поиск её не видит, выглядит как шаблон. Обещание «Haqiqatan foyda beradigan beauty topilmalar» сильное, но тонет.</li>
+      <li><b>Позиционирование расходится с хитами.</b> Самые большие охваты дают смешные скетчи «dugonezga jonating», а шапка обещает бьюти-находки. Человек пришёл посмеяться и не понимает, зачем подписываться.</li>
+      <li><b>Ссылка ведёт в закрытый Telegram-канал без подписи.</b> Непонятно, что там и зачем нажимать.</li>
+      <li><b>«for collab @sadikova.pr»</b> отправляет бренд в ещё один профиль, а это лишний шаг. Нужна кнопка «Связаться» с почтой прямо в профиле.</li>
+    </ul>
+    <p style="margin:12px 0 6px;font-weight:600;font-size:14px">Вариант шапки:</p>
+    <div class="bio">Имя: Muxlisa | Beauty topilmalar
+Био:
+O'zimda sinab ko'rgan arzon beauty topilmalar 💯
+Yosh ona 🤍 3 daqiqalik makiyaj sirlari
+👇 Barcha ssilkalar — Telegramda
+Reklama: DM yoki @sadikova.pr</div>
+  </div>
+
+  <div class="card">
+    <h3>2. Контент и подача</h3>
+    <ul class="clean">
+      <li><b>Хиты получаются случайно, повторяемого формата нет.</b> Медиана ролика — 11,6 тыс. просмотров, при этом 30 из 62 не дошли до 10 тыс.</li>
+      <li><b>Первые 3 секунды слабые в 40% роликов.</b> 25 роликов теряют 45% зрителей и больше в первые 3 секунды. Их медиана — 5 тыс. против 112 тыс. у роликов с удержанием.</li>
+      <li><b>Подписи-эмодзи не работают.</b> «😍😍😍», «💔😭😭😭», пустая подпись — 177–6 000 просмотров. Подпись — второй хук, а сейчас её нет.</li>
+      <li><b>«Obuna bolin» вредит.</b> Медиана с этим призывом — 6,8 тыс., без него — 16,2 тыс. Так было и в августе, и сейчас.</li>
+      <li><b>Реклама выглядит как реклама.</b> Ролики с тегом бренда: медиана 8,2 тыс. против 12,5 тыс., сохранений вдвое меньше, репостов в 3,6 раза меньше. Исключения — @ollee.uz (551 тыс.) и @confume_uz (165 тыс., 2 192 сохранения): в обоих сначала результат на себе, а бренд потом.</li>
+      <li><b>Чего не хватает:</b> каруселей (1 за 90 дней, а это главный формат для сохранений), рубрик и серий (на «10/?» сериал оборвался), личной истории («5 oylik ona» в ролике про волосы — сильный крючок, но он больше не повторялся).</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>3. Топ-3 ошибки, которые прямо сейчас мешают росту</h3>
+    <div class="err"><div class="num">1</div><div>
+      <b>Вирусные ролики не связаны с нишей профиля.</b> 848 тыс. просмотров дали 239 подписок, 0,28 на 1 000. Скетч смотрят, но не видят причины подписаться.
+      <div class="fix">В каждом скетче есть бьюти-«мостик»: сюжет крутится вокруг косметики, макияжа или салона. Закрепить 3 ролика, которые объясняют профиль: находка @ollee.uz, ролик с 15 960 сохранениями, @confume_uz. Поменять имя и шапку, как в варианте выше.</div>
+    </div></div>
+    <div class="err" style="margin-top:14px"><div class="num">2</div><div>
+      <b>Слабые первые 3 секунды — 40% роликов не получают шанса.</b>
+      <div class="fix">Правило: в первом кадре показывать результат или конфликт и текст на экране до 6 слов. Перед публикацией проверять: понятно ли без звука за 1 секунду, о чём ролик. Если нет — переснять начало.</div>
+    </div></div>
+    <div class="err" style="margin-top:14px"><div class="num">3</div><div>
+      <b>Нет системы: публикаций стало меньше, рубрик нет, реклама не нативная.</b> С 28 октября ничего не вышло. Бренды смотрят на свежие охваты, и падающий график снижает цену рекламы.
+      <div class="fix">5 Reels и 1 карусель в неделю по 3 рубрикам, Stories каждый день. Рекламу снимать только в формате «проблема → результат на мне → где купить». План на 30 дней во вкладке «План».</div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ЦА -->
+<section id="s-ta" data-title="ЦА">
+  <h2>Целевая аудитория: 4 сегмента</h2>
+  <p class="lead">Промт 2. Блог: бьюти-находки, UGC и лайфстайл молодой мамы. Деньги приносит реклама брендов. Сегменты построены на данных аудитории из Windsor.</p>
+  <div id="segs"></div>
+</section>
+
+<!-- ПЛАН -->
+<section id="s-plan" data-title="План 30 дней">
+  <h2>Контент-план: 3 ноября – 2 декабря</h2>
+  <p class="lead">Промт 3. Цель месяца: <b>+600 подписчиков</b>, сейчас +239, и <b>1 подписка на 1 000 просмотров</b>, сейчас 0,28. Баланс: 42% развлекательного, 42% экспертного, 15% продающего.</p>
+  <div class="card">
+    <div class="chips" id="fType">
+      <button class="chip" aria-pressed="true" data-v="all">Все</button>
+      <button class="chip" aria-pressed="false" data-v="E">Развлекательный</button>
+      <button class="chip" aria-pressed="false" data-v="X">Экспертный</button>
+      <button class="chip" aria-pressed="false" data-v="S">Продающий</button>
+      <button class="chip" aria-pressed="false" data-v="Stories">Stories-день</button>
+    </div>
+    <div id="plan"></div>
+  </div>
+  <div class="card">
+    <h3>Stories каждый день — шаблон</h3>
+    <ul class="clean">
+      <li><b>Утро:</b> опрос или «что выбрать: 1 или 2» — даёт ответы и охват.</li>
+      <li><b>День:</b> закулисье: съёмка, распаковка, малыш, быт.</li>
+      <li><b>Вечер:</b> репост нового Reels со стикером «Yangi video» и вопросом.</li>
+      <li>Раз в неделю — Stories с вопросами, ответы превращать в Reels.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Правила хука на первые 3 секунды</h3>
+    <ul class="clean">
+      <li>Первый кадр — <b>результат или конфликт</b>, а не «приветик» и не упаковка товара.</li>
+      <li>Текст на экране — до 6 слов, крупно, в верхней трети кадра.</li>
+      <li>В хуке есть число, цена или время: «30 ming», «3 daqiqa», «10 barobar».</li>
+      <li>Вопрос-спор: «Qaysi biri qimmat?» — человек остаётся, чтобы узнать ответ.</li>
+      <li>Проверка: без звука за 1 секунду понятно, о чём видео? Если нет — переснять.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Банк CTA без «впаривания»</h3>
+    <ul class="clean">
+      <li>«Shunaqa dugonangizga jonating» — для скетчей, даёт репосты.</li>
+      <li>«Saqlab qo'ying, do'konda kerak bo'ladi» — для находок, даёт сохранения.</li>
+      <li>«Qaysi biri? Kommentga 1 yoki 2 yozing» — даёт комментарии.</li>
+      <li>«Yana qism kerakmi? "+" yozing» — для серий.</li>
+      <li>«Ssilkalar Telegramda — profilda» — ведёт в канал.</li>
+      <li>❌ Не использовать: «obuna bolin», «10k uchun obuna bolin» — медиана в 2,4 раза ниже.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ЗАДАЧИ -->
+<section id="s-tasks" data-title="Задачи">
+  <h2>Задачи на эту неделю</h2>
+  <p class="lead">Отмечай выполненное: прогресс сохранится на этом устройстве.</p>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:600"><span>Прогресс</span><span id="pct">0 из 0</span></div>
+    <div class="progress"><i id="bar"></i></div>
+  </div>
+  <div class="card" id="tasks"></div>
+</section>
+
+</div>
+<script>
+const tg = window.Telegram && window.Telegram.WebApp;
+try{ if(tg){ tg.ready(); tg.expand(); tg.setHeaderColor && tg.setHeaderColor('#f6f5f2'); tg.setBackgroundColor && tg.setBackgroundColor('#f6f5f2'); } }catch(e){}
+
+/* ---------- tabs ---------- */
+const sections=[...document.querySelectorAll('section')];
+const tabs=document.getElementById('tabs');
+sections.forEach((s,i)=>{const b=document.createElement('button');b.className='tab';b.role='tab';b.textContent=s.dataset.title;b.setAttribute('aria-selected',i===0);b.onclick=()=>show(i);tabs.appendChild(b);});
+function show(i){sections.forEach((s,j)=>s.classList.toggle('on',i===j));[...tabs.children].forEach((b,j)=>b.setAttribute('aria-selected',i===j));window.scrollTo({top:0});try{tg&&tg.HapticFeedback&&tg.HapticFeedback.selectionChanged()}catch(e){}}
+show(0);
+const fmt=n=>n.toLocaleString('ru-RU').replace(/,/g,' ');
+
+/* ---------- daily views line ---------- */
+const daily=[73057,59038,28778,20124,24349,24295,23174,23407,28403,42446,18839,48310,50722,44097,23343,21674,19012,26063,21649,14410,25616,15418,10988,22695,22189,42028,15778,12361,21838,23696];
+const follows=[10,16,8,5,9,11,9,9,11,15,8,5,13,12,3,7,7,6,10,4,4,2,4,12,12,7,5,6,9,0];
+(function(){
+  const el=document.getElementById('viewsChart'),tip=el.querySelector('.tip');
+  const W=400,H=200,p={l:30,r:6,t:8,b:22},max=80000;
+  const x=i=>p.l+i*(W-p.l-p.r)/(daily.length-1), y=v=>p.t+(H-p.t-p.b)*(1-v/max);
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Просмотры по дням, 3 октября – 1 ноября">`;
+  [0,20000,40000,60000,80000].forEach(v=>{s+=`<line x1="${p.l}" x2="${W-p.r}" y1="${y(v)}" y2="${y(v)}" stroke="#ecebe7" stroke-width="1"/><text x="${p.l-6}" y="${y(v)+4}" font-size="11" fill="#8b8992" text-anchor="end">${v/1000}k</text>`});
+  ['3 окт','10 окт','17 окт','24 окт','31 окт'].forEach((t,k)=>{const i=k*7;s+=`<text x="${x(i)}" y="${H-6}" font-size="11" fill="#8b8992" text-anchor="middle">${t}</text>`});
+  const pts=daily.map((v,i)=>`${x(i)},${y(v)}`).join(' ');
+  s+=`<polygon points="${p.l},${y(0)} ${pts} ${x(daily.length-1)},${y(0)}" fill="#2a78d6" opacity=".08"/>`;
+  s+=`<polyline points="${pts}" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/>`;
+  s+=`<line id="xh" y1="${p.t}" y2="${H-p.b}" stroke="#16151a" stroke-width="1" opacity="0"/><circle id="dot" r="4.5" fill="#2a78d6" stroke="#fff" stroke-width="2" opacity="0"/>`;
+  s+=`<rect x="${p.l}" y="${p.t}" width="${W-p.l-p.r}" height="${H-p.t-p.b}" fill="transparent" id="hit"/></svg>`;
+  el.insertAdjacentHTML('afterbegin',s);
+  const svg=el.querySelector('svg'),xh=svg.querySelector('#xh'),dot=svg.querySelector('#dot');
+  function move(e){const r=svg.getBoundingClientRect(),cx=((e.touches?e.touches[0].clientX:e.clientX)-r.left)*W/r.width;let i=Math.round((cx-p.l)/((W-p.l-p.r)/(daily.length-1)));i=Math.max(0,Math.min(daily.length-1,i));
+    const d=new Date(2026,9,3+i);xh.setAttribute('x1',x(i));xh.setAttribute('x2',x(i));xh.setAttribute('opacity',.25);dot.setAttribute('cx',x(i));dot.setAttribute('cy',y(daily[i]));dot.setAttribute('opacity',1);
+    tip.innerHTML=`<b>${d.toLocaleDateString('ru-RU',{day:'numeric',month:'short'})}</b> · ${fmt(daily[i])} просм. · +${follows[i]} подп.`;tip.style.left=(x(i)/W*r.width)+'px';tip.style.top=(y(daily[i])/H*r.height)+'px';tip.style.opacity=1;}
+  function out(){tip.style.opacity=0;xh.setAttribute('opacity',0);dot.setAttribute('opacity',0)}
+  svg.addEventListener('mousemove',move);svg.addEventListener('touchstart',move,{passive:true});svg.addEventListener('touchmove',move,{passive:true});svg.addEventListener('mouseleave',out);svg.addEventListener('touchend',()=>setTimeout(out,1200));
+})();
+
+/* ---------- comparisons ---------- */
+const cmp=[
+ {t:'Удержание в первые 3 секунды',a:['Уходят < 35% (16 роликов)',112002],b:['Уходят ≥ 45% (25 роликов)',5026]},
+ {t:'Подпись-призыв переслать («jonating»)',a:['Есть (11)',38501],b:['Нет (51)',8357]},
+ {t:'Призыв «obuna bolin»',a:['Без него (52)',16164],b:['С ним (10)',6847]},
+ {t:'Реклама бренда в ролике',a:['Без бренда (45)',12462],b:['С тегом бренда (17)',8193]},
+];
+document.getElementById('cmp').innerHTML=cmp.map(c=>{const m=Math.max(c.a[1],c.b[1]);const row=(r,soft)=>`<div class="row"><div class="lab">${r[0]}</div><div class="track"><div class="fill ${soft?'soft':''}" style="width:${r[1]/m*100}%" title="${r[0]}: ${fmt(r[1])}"></div></div><div class="val">${fmt(r[1])}</div></div>`;
+ return `<div class="pair bars"><div class="t">${c.t}</div>${row(c.a)}${row(c.b,1)}<div class="muted">Разница: ×${(c.a[1]/c.b[1]).toFixed(1).replace('.',',')}</div></div>`}).join('');
+
+/* ---------- posts ---------- */
+const P=(cap,code,v,sv,sh,skip)=>({cap,code,v,sv,sh,skip});
+const topP=[P('Toptilami? 👀 Сухой шампунь @ollee.uz','DcGMfatAmFV',550855,305,531,22),P('Яшаберсам болдида озим мазза ксам болдида','DcMJ2YHgRMy',387948,1164,9871,34),P('Shunaqa dugonezga jonating 🤪💅','Dc59yeLg9nz',351637,1023,14607,28),P('Kimga jonatishni bilasizuuu 😎','DdY_1UUgp_-',322593,15960,11418,53),P('Слада охшадими???? (досмотр 33 сек)','DdRRntSTFF4',294099,207,316,21),P('Jizami qzla? 🤣','DbsQjiBAOzx',232895,427,3067,28)];
+const sav=[P('Kimga jonatishni bilasizuuu 😎','DdY_1UUgp_-',322593,15960,11418,53),P('Мандака харкуни уклад... @confume_uz','DcdipUQgJff',164828,2192,2161,31),P('Яшаберсам болдида...','DcMJ2YHgRMy',387948,1164,9871,34),P('Qovogi bor qzlaga jonatib qoyamiz','DcX5sH2AsTz',113036,1122,780,43),P('Nihoyat... jigarrang tush. Ssilkasi kommentda','Db3E_eoA4ri',107675,790,752,37)];
+const flop=[P('(без подписи)','De7FywExz3B',177,0,0,44),P('Илтимос безота кма стресс 🤪','Dcyf0qThwDc',1384,3,0,57),P('Улгурволила кзлаааааа 😍💘','DeMFqjFxJXu',1648,4,5,76),P('@pudra.uz @izezeofficial.cis','DdncSaVIRts',1708,2,2,79),P('Botex shartmas 😏 @ninelle.uz','De_8WziN-hf',2052,2,0,62)];
+const render=(id,arr)=>document.getElementById(id).innerHTML=arr.map((p,i)=>`<div class="post"><div class="n">${i+1}</div><div class="c"><div class="cap">${p.cap}</div><div class="m">${fmt(p.v)} просм. · ${fmt(p.sv)} сохр. · ${fmt(p.sh)} реп. · уходят в 3 сек: ${p.skip}%</div></div><a href="https://www.instagram.com/reel/${p.code}/" target="_blank" rel="noopener">Открыть ↗</a></div>`).join('');
+render('top',topP);render('saves',sav);render('flop',flop);
+
+/* ---------- audience ---------- */
+const bars=(id,arr,unit)=>{const m=Math.max(...arr.map(a=>a[1]));document.getElementById(id).innerHTML=arr.map(a=>`<div class="row"><div class="lab">${a[0]}</div><div class="track"><div class="fill" style="width:${a[1]/m*100}%" title="${a[0]}: ${fmt(a[1])}"></div></div><div class="val">${a[2]}</div></div>`).join('')};
+bars('ages',[['13–17',285,'10%'],['18–24',1197,'42%'],['25–34',848,'30%'],['35–44',331,'12%'],['45–54',116,'4%'],['55+',63,'2%']]);
+bars('cities',[['Янгиер',409,'14,4%'],['Навои',166,'5,8%'],['Турткуль',143,'5,0%'],['Ургенч',128,'4,5%'],['Ромитан',125,'4,4%'],['Андижан',124,'4,4%'],['Самарканд',119,'4,2%'],['Яйпан',100,'3,5%'],['Ташкент',80,'2,8%']]);
+
+/* ---------- segments ---------- */
+const segs=[
+ {tag:'≈42% · 18–24',n:'Девушки из регионов: студентки и недавние выпускницы',
+  pain:'Мало денег на косметику; в их городе нет нормальных магазинов; боятся подделок; не знают, что реально работает, а что — реклама.',
+  want:'Выглядеть так же ухоженно, как ташкентские девушки из ленты. Быть «в теме» и иметь блогера-подругу, которой можно верить.',
+  obj:'«Это дорого», «у нас такого не продают», «блогеры хвалят за деньги».',
+  topics:[`«Ishlaydigan kosmetika 50 ming so'mgacha» — топ-5 с ценами`,`«Original yoki qalbaki: 6 belgi» — карусель-чеклист`,`«Darsga 5 daqiqada tayyor» — макияж для пары`]},
+ {tag:'≈30% · 25–34',n:'Молодые мамы',
+  pain:'Нет времени на себя; волосы и кожа после родов; усталость на лице; ощущение, что «запустила себя».',
+  want:'Снова почувствовать себя красивой и собой, а не только мамой. Короткие ритуалы, которые помещаются в сон малыша.',
+  obj:'«У меня нет на это времени», «блогерам легко — у них всё есть», «после родов уже не то».',
+  topics:[`«Bola uxlaguncha 3 daqiqalik makiyaj» — с таймером в кадре`,`«Tug'ruqdan keyin sochim to'kildi: 3 qadam» — личная история`,`«Yosh onaning kuni filtrsiz» — честный влог`]},
+ {tag:'Приходят со скетчей',n:'Те, кто пришёл посмеяться и переслать подруге',
+  pain:'Скучно, хочется лёгкого контента «про нас»; ищут, что скинуть подруге в директ.',
+  want:'Чувство «это точно про меня и мою дугону» — принадлежность к своим.',
+  obj:'«Подпишусь, а там одна реклама», «в профиле нет таких же смешных видео».',
+  topics:[`«Salonda qizlarning 5 turi» — скетч с бьюти-мостиком`,`«Dugonang kosmetikangni so'raganda» — relatable`,`«TikTok makiyaji: kutilgan vs haqiqat» — юмор + урок`]},
+ {tag:'Покупатель рекламы',n:'Бренды и PR-менеджеры (Ташкент)',
+  pain:'Боятся накрученной аудитории и рекламы без продаж; не понимают, кто смотрит.',
+  want:'Живые охваты, нативная подача, понятная цифра «сколько людей увидит» и кейсы.',
+  obj:'«Всего 2,8 тыс. подписчиков», «аудитория не из Ташкента», «рекламные ролики набирают меньше».',
+  topics:[`Кейс «Как ролик для @ollee.uz набрал 551 тыс.» — Reels/Highlights`,`Карусель-медиакит: 848 тыс. просмотров/мес, 81% женщины, 72% — 18–34`,`«Halol sharh»: продукт, который НЕ понравился, — доказательство честности`]}
+];
+document.getElementById('segs').innerHTML=segs.map(s=>`<div class="card seg"><span class="tag">${s.tag}</span><h3>${s.n}</h3><div class="kv"><b>Боли сейчас</b>${s.pain}<b>Скрытое желание</b>${s.want}<b>Возражения</b>${s.obj}<b>3 темы, которые закрывают боль</b><ul class="clean">${s.topics.map(t=>`<li>${t}</li>`).join('')}</ul></div></div>`).join('');
+
+/* ---------- plan ---------- */
+const L={E:'Развлекательный',X:'Экспертный',S:'Продающий'};
+const plan=[
+['3 ноя','пн','Reels','X','Natija o\'zimda: 3 средства для сияния кожи до 100 тыс. сум','100 ming so\'mga yuzim shunaqa yaltiraydi — isbot 👇','Ro\'yxatni saqlab qo\'ying'],
+['4 ноя','вт','Reels','E','Скетч: дугона просит твою косметику','Dugonang: «bir marta surib ko\'ray»...','Shunaqa dugonangizga jonating'],
+['5 ноя','ср','Карусель','X','5 ошибок, из-за которых тональный крем ложится пятнами','Tonal krem dog\' bo\'lsa — aybi sizda emas','Qaysi xatoni qilardingiz? Raqamini yozing'],
+['6 ноя','чт','Reels','E','Макияж мамы: ожидание и реальность','Yosh ona makiyaji: reja 20 daqiqa, haqiqat 3 daqiqa','Onalar, sizda ham shunaqami? 🙋‍♀️'],
+['7 ноя','пт','Reels','S','Нативная интеграция: проблема → результат на себе → где купить','Sochim to\'kilishi to\'xtadi — 3 hafta natijasi','Ssilka Telegram kanalimda (profilda)'],
+['8 ноя','сб','Reels','E','Скетч: 5 типов девушек в салоне красоты','Salonda har doim shu 5 qiz bo\'ladi. Siz qaysisiz?','Raqamingizni kommentga yozing'],
+['9 ноя','вс','Stories','Stories','Опрос «что разобрать на неделе» + вопросы + закулисье','Savolingizni qoldiring — javob Reelsda','Стикер вопросов'],
+['10 ноя','пн','Reels','X','Дешёвое против дорогого: помада за 30 тыс. и за 300 тыс.','Biri 30 ming, biri 300 ming. Qaysi biri qaysi?','Javobni kommentga: 1 yoki 2'],
+['11 ноя','вт','Reels','E','Скетч: «Ты готова?» — муж ждёт, а макияж ещё нет','Erim «tayyormisan?» deganda...','Eringizga jonating 😅'],
+['12 ноя','ср','Карусель','X','Как в регионе отличить оригинал от подделки: 6 признаков','Bu krem — qalbaki. Qanday bildim?','Saqlang, do\'konda kerak bo\'ladi'],
+['13 ноя','чт','Reels','X','Макияж за 3 минуты, пока малыш спит (таймер в кадре)','Bola uxladi. Taymer: 3 daqiqa. Boshladik','Saqlab qo\'ying'],
+['14 ноя','пт','Reels','E','Трендовый звук + преображение «7:00 против 7:15»','Ertalab 7:00 vs 7:15','Dugonangizni belgilang'],
+['15 ноя','сб','Reels','S','Честный обзор: хвалёный крем мне не подошёл + что взяла взамен','Hamma maqtagan krem menga yoqmadi. Sababi:','Siz ishlatganmisiz? Fikringizni yozing'],
+['16 ноя','вс','Stories','Stories','Итоги недели + голосование «какую серию продолжить»','Qaysi videoning davomini xohlaysiz?','Опрос'],
+['17 ноя','пн','Reels','X','Серия «Topilma #1»: 1 проблема — 1 средство','Qovoq tushadimi? 25 ming so\'mlik narsa yordam berdi','Yana qism kerakmi? «+» yozing'],
+['18 ноя','вт','Reels','E','Показываю, что в моей косметичке','Sumkamda nima bor — uyalaman, lekin ko\'rsataman','Siznikida nima bor? Yozing'],
+['19 ноя','ср','Карусель','X','Тест: тип кожи за 1 минуту','Terimning turi qanaqa? 1 daqiqalik test','Natijangizni kommentga yozing'],
+['20 ноя','чт','Reels','E','Скетч: «Возьмём только одно» — дугоны в магазине','«Faqat bitta narsa olamiz» dedik...','Shu dugonaga jonating'],
+['21 ноя','пт','Reels','X','Волосы после родов: что помогло мне (личная история)','Tug\'ruqdan keyin sochim to\'kildi. Mana 3 qadam','Saqlab qo\'ying'],
+['22 ноя','сб','Reels','E','«Chala blogerlar», часть 2 (первая — 38,5 тыс.)','Chala bloger reklama qilganda. 2-qism','1-qismi profilda'],
+['23 ноя','вс','Stories','Stories','Ответы на вопросы + опрос по будущему обзору','Siz so\'ragan edingiz — javob beraman','Стикер вопросов'],
+['24 ноя','пн','Reels','X','Дешёвое против дорогого #2: тушь','Farqi 10 barobar. Ko\'z bilan topa olasizmi?','1 yoki 2 — kommentga'],
+['25 ноя','вт','Reels','E','Скетч: девушки зимой — 5 слоёв одежды, а макияж...','Qish keldi: 5 qavat kiyim, makiyaj esa...','Dugonangizga jonating'],
+['26 ноя','ср','Карусель','S','Медиакит для брендов: 848 тыс. просмотров, 81% женщины, кейсы → в Highlights','Bu sahifa — brendlar uchun','Hamkorlik: DM yoki @sadikova.pr'],
+['27 ноя','чт','Reels','X','Свадебный макияж гостьи за 10 минут','To\'yga 10 daqiqada tayyor. Ishonmaysizmi?','Saqlab qo\'ying'],
+['28 ноя','пт','Reels','E','Челлендж: муж делает мне макияж','Erimga makiyajimni topshirdim 😳','Eringizga jonating'],
+['29 ноя','сб','Reels','S','3 лучшие находки месяца с результатом + ссылки в Telegram','Oyning eng yaxshi 3 topilmasi — natija bilan','Ssilkalar Telegramda'],
+['30 ноя','вс','Stories','Stories','Итоги месяца: какую рубрику оставить','Qaysi rubrika qolsin?','Опрос'],
+['1 дек','пн','Reels','X','Сухая кожа зимой: 3 недорогих решения','Yuzim qishda po\'st tashlardi. Endi yo\'q','Saqlab qo\'ying'],
+['2 дек','вт','Reels','E','«30 видео за ноябрь»: ожидание и реальность (юмор + итог)','Noyabrda 30 ta video dedim. Mana nima bo\'ldi','Qaysi video eng yaxshisi? Yozing'],
+];
+function drawPlan(f){document.getElementById('plan').innerHTML=plan.filter(r=>f==='all'||r[3]===f).map(r=>`<div class="day"><div class="dt">${r[0]}<span>${r[1]}</span></div><div><div class="badges"><span class="b">${r[2]}</span><span class="b ${r[3]}">${L[r[3]]||'Stories-день'}</span></div><div class="topic">${r[4]}</div><div class="hook">${r[5]}</div><div class="cta">${r[6]}</div></div></div>`).join('')}
+drawPlan('all');
+document.querySelectorAll('#fType .chip').forEach(c=>c.onclick=()=>{document.querySelectorAll('#fType .chip').forEach(x=>x.setAttribute('aria-pressed',x===c));drawPlan(c.dataset.v)});
+
+/* ---------- tasks ---------- */
+const tasks=[
+ ['Сегодня','Поменять имя профиля','«Influencer| Content creator» → «Muxlisa | Beauty topilmalar». По этому полю работает поиск.'],
+ ['Сегодня','Переписать шапку','Обычным шрифтом, вариант — во вкладке «Аудит профиля».'],
+ ['Сегодня','Подписать ссылку на Telegram','В био: «👇 Barcha ssilkalar — Telegramda». В канале закрепить пост со всеми ссылками.'],
+ ['Сегодня','Включить кнопку «Связаться» с почтой','Настройки профессионального аккаунта → кнопки контактов. Бренды пишут сразу, без @sadikova.pr.'],
+ ['До 4 ноя','Закрепить 3 ролика','@ollee.uz (551 тыс.), «Kimga jonatishni bilasizuuu» (15 960 сохранений), @confume_uz.'],
+ ['До 5 ноя','Пересобрать Highlights','Topilmalar · Natija · Ona hayoti · Reklama (с цифрами охватов). Пришли скриншот — проверю.'],
+ ['Всегда','Убрать «obuna bolin» из подписей','С ним медиана в 2,4 раза ниже. Брать CTA из банка во вкладке «План».'],
+ ['Всегда','Проверять хук перед публикацией','Без звука за 1 секунду понятно, о чём видео? Если нет — переснять начало.'],
+ ['3 ноя','Выложить первый ролик плана','«100 ming so\'mga yuzim shunaqa yaltiraydi» — первым кадром показать результат.'],
+ ['До 8 ноя','Выложить 5 Reels + 1 карусель','По плану на 3–8 ноября. В пятницу сверяем цифры недели.'],
+];
+const KEY='mukhlisa_tasks_v1';let st={};try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+function drawTasks(){const box=document.getElementById('tasks');box.innerHTML=tasks.map((t,i)=>`<label class="task ${st[i]?'done':''}"><input type="checkbox" data-i="${i}" ${st[i]?'checked':''}><div><div class="when">${t[0]}</div><div class="tt">${t[1]}</div><div class="td">${t[2]}</div></div></label>`).join('');
+ const n=Object.values(st).filter(Boolean).length;document.getElementById('pct').textContent=`${n} из ${tasks.length}`;document.getElementById('bar').style.width=(n/tasks.length*100)+'%';
+ box.querySelectorAll('input').forEach(c=>c.onchange=()=>{st[c.dataset.i]=c.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){};try{tg&&tg.HapticFeedback&&tg.HapticFeedback.impactOccurred('light')}catch(e){};drawTasks()});}
+drawTasks();
+</script>
+</body>
+</html>
