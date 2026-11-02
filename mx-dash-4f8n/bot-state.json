@@ -1,8 +1,8 @@
 {
   "status": "waiting",
   "last_reminder_id": 18,
-  "last_update_id": 324516671,
-  "picks": [],
-  "prepared": [],
-  "note": "Scheduled reminder state for @mukhlisa22092024_bot. status: waiting | done"
+  "last_update_id": 324516672,
+  "picks": [4],
+  "prepared": [4],
+  "note": "status waiting = Мухлиса ещё не выбрала сама (тему 4 выбрал Тимур 02.11, сценарий готов). status idle = напоминания остановлены."
 }
