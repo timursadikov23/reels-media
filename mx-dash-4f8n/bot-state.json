@@ -1,8 +1,12 @@
 {
   "status": "waiting",
-  "last_reminder_id": 18,
-  "last_update_id": 324516672,
-  "picks": [4],
-  "prepared": [4],
+  "last_reminder_id": 22,
+  "last_update_id": 324516673,
+  "picks": [
+    4
+  ],
+  "prepared": [
+    4
+  ],
   "note": "status waiting = Мухлиса ещё не выбрала сама (тему 4 выбрал Тимур 02.11, сценарий готов). status idle = напоминания остановлены."
 }
