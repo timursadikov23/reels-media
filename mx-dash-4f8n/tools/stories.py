@@ -96,6 +96,9 @@ import os as _os, sys as _sys
 _sys.path.insert(0,_os.path.dirname(_os.path.abspath(__file__)))
 from topics2 import T2, FUN2, ACC2
 T += T2; FUN += FUN2; ACC += ACC2
+from topics3 import T3, T4, FUN3, FUN4, ACC3, ACC4, FORMATS
+for _t in T: _t.setdefault("fmt", "story")
+T += T3 + T4; FUN += FUN3 + FUN4; ACC += ACC3 + ACC4
 for _x,(_c,_a,_b),_n in zip(T,FUN,ACC):
     _x.update(code=_c,alt=_a,bonus=_b,cta=f"Kommentga «{_c}» yozing — {_n} Direktga yuboraman 💌")
 
@@ -186,15 +189,23 @@ def html_tab():
     labels = ["Нарастание", "Второй конфликт", "Кульминация", "Развязка"]
     cards = ""
     for i, x in enumerate(T):
-        beats = "".join(f"<li><b>{l}:</b> {esc(s_)}</li>" for l, s_ in zip(labels, x["s"]))
-        cards += (f'<div class="card seg story" data-i="{i}" data-code="{esc(x["code"])}" data-title="{esc(x["t"])}" data-bonus="{esc(x["bonus"])}" data-cta="{esc(x["cta"])}" data-hook="{esc(x["hook"])}">'
-                  f'<div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start"><span class="tag">{i+1} · {esc(x["type"])}</span>'
+        F = FORMATS[x["fmt"]]
+        beats = "".join(f"<li><b>{l}:</b> {esc(s_)}</li>" for l, s_ in zip(F["labels"], x["s"]))
+        tagtxt = f'{i+1} · {F["short"]}' + ('' if x["fmt"] != "story" else f' · {x["type"]}')
+        cards += (f'<div class="card seg story" data-fmt="{x["fmt"]}" data-i="{i}" data-code="{esc(x["code"])}" data-title="{esc(x["t"])}" data-bonus="{esc(x["bonus"])}" data-cta="{esc(x["cta"])}" data-hook="{esc(x["hook"])}">'
+                  f'<div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start"><span class="tag">{esc(tagtxt)}</span>'
                   f'<button class="pick" aria-pressed="false">☆ Выбрать</button></div>'
                   f'<h3>{esc(x["t"])}</h3><div class="hook2">{esc(x["hook"])}</div>'
                   f'<ul class="clean" style="margin-top:8px;font-size:14px">{beats}</ul>'
                   f'<div class="funnel"><div class="frow"><span>🔑 Код</span><span><b>{esc(x["code"])}</b> <span class="muted">/ {esc(x["alt"])}</span></span></div>'
                   f'<div class="frow"><span>🎁 Бонус</span>{esc(x["bonus"])}</div>'
                   f'<div class="frow"><span>💬 CTA</span><i>{esc(x["cta"])}</i></div></div></div>')
+    cnt = {f: sum(1 for x in T if x["fmt"] == f) for f in FORMATS}
+    chips = ('<div class="chips" id="fmtChips"><button class="chip" aria-pressed="true" data-f="all">Все · ' + str(len(T)) + '</button>'
+             + "".join(f'<button class="chip" aria-pressed="false" data-f="{f}">{esc(FORMATS[f]["name"])} · {cnt[f]}</button>' for f in FORMATS) + '</div>')
+    fmts = ('<div class="card"><h3>3 формата</h3>' + "".join(
+        f'<div class="fstep"><div class="fn">{n}</div><div><b>{esc(F["name"])}</b> <span class="muted">· {cnt[f]} тем</span><div class="td" style="font-size:13px;color:var(--ink2)">{esc(F["about"])}</div></div></div>'
+        for n, (f, F) in enumerate(FORMATS.items(), 1)) + '<p class="muted" style="margin:8px 0 0">В каждом формате в конце — кодовое слово для ChatPlace: комментарий → проверка подписки → бонус в Telegram.</p></div>')
     css = ('<style>.pick{flex:none;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 11px;font:600 12px/1 inherit;color:var(--ink2);cursor:pointer}'
            '.pick[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}'
            '.story.picked{box-shadow:0 0 0 2px var(--accent)}'
@@ -209,15 +220,16 @@ def html_tab():
     js = r"""<script>
 (function(){
  var KEY='mukhlisa_story_pick_v1',st={};try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
- var cards=[].slice.call(document.querySelectorAll('.story')),only=false;
+ var cards=[].slice.call(document.querySelectorAll('.story')),only=false,fmt='all';
  var tgw=window.Telegram&&window.Telegram.WebApp;
  function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
  function draw(){var n=0;cards.forEach(function(c){var on=!!st[c.dataset.i];if(on)n++;c.classList.toggle('picked',on);
-   var b=c.querySelector('.pick');b.setAttribute('aria-pressed',on);b.textContent=on?'★ Выбрано':'☆ Выбрать';c.style.display=(only&&!on)?'none':'';});
+   var b=c.querySelector('.pick');b.setAttribute('aria-pressed',on);b.textContent=on?'★ Выбрано':'☆ Выбрать';c.style.display=((only&&!on)||(fmt!=='all'&&c.dataset.fmt!==fmt))?'none':'';});
    document.getElementById('selN').textContent='★ '+n+'/'+cards.length;
    document.getElementById('selOnly').textContent=only?'Все':'Фильтр';}
  cards.forEach(function(c){c.querySelector('.pick').onclick=function(){st[c.dataset.i]=!st[c.dataset.i];save();draw();try{tgw&&tgw.HapticFeedback&&tgw.HapticFeedback.impactOccurred('light')}catch(e){}};});
  document.getElementById('selOnly').onclick=function(){only=!only;draw();};
+ [].slice.call(document.querySelectorAll('#fmtChips .chip')).forEach(function(b){b.onclick=function(){fmt=b.dataset.f;[].slice.call(document.querySelectorAll('#fmtChips .chip')).forEach(function(x){x.setAttribute('aria-pressed',x===b)});draw();};});
  document.getElementById('selCopy').onclick=function(){var t=cards.filter(function(c){return st[c.dataset.i]}).map(function(c,k){
    return (k+1)+'. '+c.dataset.title+'\nХук: '+c.dataset.hook+'\nКод: '+c.dataset.code+'\nБонус: '+c.dataset.bonus+'\nCTA: '+c.dataset.cta;}).join('\n\n');
    var btn=this;if(!t){btn.textContent='Ничего не выбрано';setTimeout(function(){btn.textContent='Копия'},1400);return;}
@@ -232,10 +244,11 @@ def html_tab():
  draw();
 })();
 </script>"""
-    return (f'\n<!-- ИСТОРИИ -->\n<section id="s-stories" data-title="Истории">\n{css}\n'
-            f'  <h2>Сторителлинг + воронка</h2>\n'
-            f'  <p class="lead"><b>Выбери тему → «Отправить ✈» → нажми Start в боте.</b> Полный сценарий появится здесь же в течение часа. Каждый ролик — история в 5 шагов, а в развязке кодовое слово. ChatPlace проверяет подписку и только потом отдаёт бонус. Так ролик даёт сразу комментарии, подписки и переходы в Telegram. Отметь темы, которые реально были, — выбор сохранится на этом телефоне.</p>\n'
+    return (f'\n<!-- ИСТОРИИ -->\n<section id="s-stories" data-title="Темы">\n{css}\n'
+            f'  <h2>Темы: 3 формата + воронка</h2>\n'
+            f'  <p class="lead"><b>Выбери тему → «Отправить ✈» → нажми Start в боте.</b> Полный сценарий под выбранный формат появится во вкладке «Сценарий» в течение часа. 50 тем в трёх форматах: сторителлинг, тренд-туториал и экспертный кейс. Для историй и кейсов выбирай то, что реально было.</p>\n'
             f'  <div class="selbar"><span id="selN">Выбрано: 0</span><span style="display:flex;gap:6px"><button class="ghost" id="selOnly">Фильтр</button><button class="ghost" id="selCopy">Копия</button><button id="selSend">Отправить ✈</button></span></div><div id="sentNote" class="card" style="display:none;background:var(--good-bg);border-color:#bfe3cc;font-size:14px"><b>✅ Выбор отправлен в бот.</b> В чате это выглядит как «/start» — так и должно быть. Сценарий появится во вкладках «Выбранные» и «Сценарий» в течение часа.</div>\n'
+            f'  {chips}\n  {fmts}\n'
             f'  {cards}\n'
             f'  <div class="card"><h3>Воронка в ChatPlace — одна на все ролики</h3>{flow}</div>\n'
             f'  <div class="card"><h3>Чек-лист публикации</h3><ul class="clean">{chk}</ul></div>\n'
