@@ -35,7 +35,7 @@ tab = st.html_tab()
 tab = (tab.replace("mukhlisa_story_pick_v1", "tripvibe_pick_v1").replace("mukhlisa22092024_bot", "timurblog222024_bot")
           .replace("<h3>3 формата</h3>", f"<h3>{word}</h3>").replace("Темы: 3 формата + воронка", f"Темы: {word} + воронка")
           .replace("Полный сценарий под выбранный формат появится во вкладке «Сценарий» в течение часа. 50 тем в трёх форматах: сторителлинг, тренд-туториал и экспертный кейс. Для историй и кейсов выбирай то, что реально было.",
-                   f"Полный сценарий под формат появится во вкладке «Сценарий» в течение часа. {len(TOPICS)} тем в {n_fmt} форматах: F1–F3 — твои фиксированные форматы, F4 — «локация + вопрос», дальше — форматы из твоих новых референсов.")
+                   f"Полный сценарий под формат появится во вкладке «Сценарий» в течение часа. {len(TOPICS)} тем в {n_fmt} форматах: F1–F3 — твои фиксированные форматы, F4 — «локация + вопрос» из данных, F5–F7 — форматы из референсов, адаптированные под travel.")
           .replace("<h3>Схема истории</h3>", "<h3>Производство</h3>")
           .replace("Kanalda barcha topilmalar ssilkalari bor", "Kanalda barcha lokatsiyalar va ro'yxatlar bor")
           .replace("Va'da qilganimni tayyorlab qo'ydim", "Va'da qilgan ma'lumotni tayyorlab qo'ydim")
