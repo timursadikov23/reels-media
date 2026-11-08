@@ -4,48 +4,50 @@ import html, re, sys
 E = html.escape
 N = 2
 TITLE = "Первая реклама провалилась"
-HOOK = "Birinchi reklamam [2 ming] ko'rish oldi. Brend menga boshqa yozmadi."
+HOOK = "Birinchi reklamam 14 ming ko'rish oldi. Reklamasiz oddiy videom esa ertasi kuni 461 ming oldi."
+
 CODE, ALT = "BLOG", "БЛОГ"
 BONUS = "Brendga reklama taklif qilish: tayyor xabar shabloni"
 DATE_PICK, DATE_FULL = "08.11", "08.11.2026"
 
 STEPS = [
- ("0–4 с", "1. Хук",
-  "Birinchi reklamam [2 ming] ko'rish oldi. Va brend menga boshqa hech qachon yozmadi.",
-  "Birinchi reklama — [2 ming]",
-  "Крупный план, серьёзное лицо. В углу — скриншот статистики того самого ролика [реальный]."),
- ("4–20 с", "2. Нарастание",
-  "Reklama — orzuim edi. Birinchi brend yozganda [qanday xursand bo'lganingiz]. Hamma blogerlar qanday qilsa, men ham shunday suratga oldim: qadoq, brend haqida gap, «albatta sotib oling».",
-  "Hamma qilgandek qildim",
-  "Вставки: кусок той первой рекламы (распаковка, упаковка крупно) [реальный ролик], переписка с брендом без имени бренда."),
- ("20–38 с", "3. Второй конфликт",
-  "Video chiqdi — [2 ming] ko'rish. Brend jim. Uyaldim. O'zimga «sendan bloger chiqmaydi» dedim va [necha kun / hafta] hech narsa joylamadim.",
-  "Brend jim qoldi",
-  "Пустой директ на экране телефона, ты смотришь в сторону. Перед кульминацией — 1 секунда тишины."),
- ("38–55 с", "4. Кульминация",
+ ("0–7 с", "1. Хук",
+  "Birinchi reklamam 14 ming ko'rish oldi. Reklamasiz oddiy videom esa ertasi kuni 461 ming oldi.",
+  "Birinchi reklama — 14 ming",
+  "Говоришь в камеру. Слева всплывает карточка статистики рекламы @ollee.uz 26.04.2026 (13 999), затем — ролика 27.04.2026 (461 043). Крупно: «14 MING KO'RISH», «461 MING»."),
+ ("7–16 с", "2. Как все",
+  "Ollee.uz birinchi marta yozganda juda xursand bo'ldim. Hamma blogerlar qanday qilsa, men ham shunday qildim: mahsulotni ko'rsatdim, brendni maqtadim, «ssilka storisda».",
+  "Hamma qilgandek",
+  "Говоришь в камеру, можно жестами показать «как все»."),
+ ("16–20 с", "3. Ошибка",
+  "Natija — 14 ming. Deyarli yarmi birinchi 3 soniyada tashlab ketdi.",
+  "46% tashlab ketdi",
+  "Снова карточка первой рекламы: 46,4% зрителей ушли в первые 3 секунды. Крупно: «46% TASHLAB KETDI»."),
+ ("20–27 с", "4. Вывод",
   "Keyin tushundim: odamlar reklamani emas, natijani ko'rishni xohlaydi. Avval mening muammom va natijam — brend esa keyin.",
   "Avval natija, keyin brend",
-  "Говоришь прямо в камеру, теплее и увереннее. Музыка выходит на пик на слове «natija»."),
- ("55–75 с", "5. Развязка + CTA",
-  "Shu formatda @ollee.uz uchun video qildim — 551 ming ko'rish. Endi brendlar o'zi yozadi. Brendga qanday yozishni bilmoqchimisiz? Kommentga «BLOG» deb yozing — tayyor xabar shablonini Direktga yuboraman 💌",
-  "551 000 ko'rish · «BLOG»",
-  "Вставка: ролик @ollee.uz и скриншот его статистики (551 тыс. — реальная цифра). Кодовое слово крупно на последних 3 секундах."),
+  "Прямо в камеру, теплее и увереннее. Крупно: «NATIJA»."),
+ ("27–43 с", "5. Результат + CTA",
+  "Avgustda xuddi shu brend uchun shu formatda video qildim — 552 ming ko'rish. Tashlab ketganlar esa 46 emas, 22 foiz. Brendga qanday yozishni bilmoqchimisiz? Kommentga «BLOG» deb yozing — tayyor shablonni Direktga yuboraman.",
+  "552 ming · «BLOG»",
+  "Карточка ролика @ollee.uz 16.08.2026 (552 372, ушли 22,3%). Крупно: «552 MING KO'RISH», «46% EMAS / 22%», в конце «BLOG»."),
 ]
 
 MUSIC = [
- "0–20 с: лёгкая фоновая музыка, голос впереди (−20 дБ).",
- "20–38 с: музыка темнее и тише; перед кульминацией — 1 секунда полной тишины.",
- "38–55 с: нарастание, пик на «Avval natija».",
- "55–75 с: уверенный, светлый финал; на цифре «551 000» — звук-акцент.",
- "Субтитры по одному слову; плашка шага сверху; «551 000» — крупной цифрой.",
- "Вставки из прошлого — маленьким окном в верхнем углу, 1–3 с каждая.",
+ "0–16 с: лёгкая фоновая музыка, голос впереди (−20 дБ).",
+ "16–20 с: музыка тише на «46% tashlab ketdi»; 0,5 с паузы перед «Keyin tushundim».",
+ "20–27 с: нарастание, пик на «natija».",
+ "27–43 с: уверенный, светлый финал; на «552 MING» — акцент (уже есть в зелёном шаблоне).",
+ "Плашки глав сверху справа, карточки статистики слева, крупные цифры внизу — всё в шаблоне.",
+ "Субтитры — добавь свои в Edits/CapCut, в шаблоне их нет.",
 ]
 
-CAPTION = ("Birinchi reklamam [2 ming] ko'rish oldi — brend boshqa yozmadi 😶\n\n"
- "Hamma qilgandek qildim: qadoq, maqtov, «sotib oling».\n"
+CAPTION = ("Birinchi reklamam 14 ming ko'rish oldi — oddiy videom esa 461 ming 😶\n\n"
+ "Hamma qilgandek qildim: mahsulot, maqtov, «ssilka storisda».\n"
+ "Natija: odamlarning deyarli yarmi 3 soniyada tashlab ketdi.\n"
  "Keyin tushundim: odamlar reklamani emas, natijani ko'rishni xohlaydi.\n"
- "Shu formatdagi keyingi video — 551 ming ko'rish 🤍\n\n"
- "Siz ham blog yuritasizmi? Birinchi reklamangiz qanday bo'lgan?\n\n"
+ "Shu brend uchun shu formatdagi video — 552 ming ko'rish 🤍\n\n"
+ "Birinchi reklamangiz qanday bo'lgan?\n\n"
  "👇 Kommentga «BLOG» yozing — brendga yoziladigan tayyor xabar shablonini Direktga yuboraman")
 
 PINNED = "«BLOG» deb yozing — brendga yoziladigan tayyor xabar shablonini Direktga yuboraman 💌\nBirinchi reklamangiz qanday o'tgan? 👇"
@@ -69,9 +71,9 @@ BONUS_POST = ("💌 Brendga reklama taklif qilish — tayyor xabar\n\n"
  "💡 3 qoida: 1) har bir brendga alohida yozing; 2) raqamlarni albatta qo'shing; 3) bitta eng yaxshi videoni ko'rsating.")
 
 CHECK = [
- "Заполнить [скобки]: сколько просмотров было у первой рекламы, как радовалась, сколько дней не выкладывала.",
- "Найти реальные вставки: первая реклама, её статистика, ролик @ollee.uz и его статистика (551 тыс.).",
- "Имя бренда первой рекламы не называть.",
+ "Цифры из Instagram-статистики (Windsor, 08.11.2026): 26.04 @ollee.uz — 13 999 просм., ушли за 3 с 46,4%; 27.04 — 461 043; 16.08 @ollee.uz — 552 372, ушли 22,3%.",
+ "Подтвердить: ollee.uz написал первым; ролик 16.08 был для ollee.",
+ "Видео: снять дубль по тексту, наложить зелёный шаблон mx_birinchi_reklama_GREEN.mp4 (хромакей) или прислать дубль — смонтирую под него.",
  "Пост-бонус опубликован в Telegram-канале, ссылка вставлена в ChatPlace.",
  "ChatPlace: точное совпадение для «BLOG», проверка комментарием с чужого аккаунта.",
  "После публикации — свой комментарий с кодом, закрепить. Через 48 ч: комментарии с кодом, подписки, переходы в Telegram.",

@@ -25,7 +25,7 @@ T = [
      "Результат через N недель на камеру + что именно помогло (бренд нативно)."],
   cta="Kommentga «SOCH» yozing — ro'yxatni yuboraman"),
  dict(t="Первая реклама провалилась", type="Экспертный",
-  hook="Birinchi reklamam 2 ming ko'rish oldi. Brend menga boshqa yozmadi.",
+  hook="Birinchi reklamam 14 ming ko'rish oldi. Oddiy videom esa ertasi kuni 461 ming.",
   s=["Мечтала о рекламе: первый бренд, радость, сняла «как у всех».",
      "Ролик провалился, было стыдно, решила, что не умею.",
      "Поняла: реклама не должна выглядеть как реклама — сначала моя проблема и результат на мне.",
