@@ -1,14 +1,16 @@
 {
-  "status": "waiting",
+  "status": "idle",
   "last_reminder_id": 107,
   "last_update_id": 324516681,
   "picks": [
+    2,
     4
   ],
   "prepared": [
+    2,
     4
   ],
-  "note": "status waiting = Мухлиса ещё не выбрала сама (тему 4 выбрал Тимур 02.11, сценарий готов). status idle = напоминания остановлены.",
+  "note": "status idle с 08.11: Мухлиса выбрала тему 2 в Mini App (до бота дошёл пустой /start — засчитано вручную). Напоминания остановлены.",
   "tasks_done": [
     {
       "date": "2026-11-02",
