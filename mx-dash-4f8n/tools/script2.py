@@ -6,7 +6,7 @@ N = 2
 TITLE = "Первая реклама провалилась"
 HOOK = "Birinchi reklamam 14 ming ko'rish oldi. Reklamasiz oddiy videom esa ertasi kuni 461 ming oldi."
 
-CODE, ALT = "BLOG", "БЛОГ"
+CODE, ALT = "+", "+"
 BONUS = "Brendga reklama taklif qilish: tayyor xabar shabloni"
 DATE_PICK, DATE_FULL = "08.11", "08.11.2026"
 
@@ -28,9 +28,9 @@ STEPS = [
   "Avval natija, keyin brend",
   "Прямо в камеру, теплее и увереннее. Крупно: «NATIJA»."),
  ("27–43 с", "5. Результат + CTA",
-  "Avgustda xuddi shu brend uchun shu formatda video qildim — 552 ming ko'rish. Tashlab ketganlar esa 46 emas, 22 foiz. Brendga qanday yozishni bilmoqchimisiz? Kommentga «BLOG» deb yozing — tayyor shablonni Direktga yuboraman.",
-  "552 ming · «BLOG»",
-  "Карточка ролика @ollee.uz 16.08.2026 (552 372, ушли 22,3%). Крупно: «552 MING KO'RISH», «46% EMAS / 22%», в конце «BLOG»."),
+  "Avgustda xuddi shu brend uchun shu formatda video qildim — 552 ming ko'rish. Tashlab ketganlar esa 46 emas, 22 foiz. Brendga qanday yozishni bilmoqchimisiz? Kommentga «+» deb yozing — brendga yoziladigan tayyor xabar shablonini Direktga yuboraman.",
+  "552 ming · «+»",
+  "Карточка ролика @ollee.uz 16.08.2026 (552 372, ушли 22,3%). Крупно: «552 MING KO'RISH», «46% EMAS / 22%», в конце «+»."),
 ]
 
 MUSIC = [
@@ -48,12 +48,12 @@ CAPTION = ("Birinchi reklamam 14 ming ko'rish oldi — oddiy videom esa 461 ming
  "Keyin tushundim: odamlar reklamani emas, natijani ko'rishni xohlaydi.\n"
  "Shu brend uchun shu formatdagi video — 552 ming ko'rish 🤍\n\n"
  "Birinchi reklamangiz qanday bo'lgan?\n\n"
- "👇 Kommentga «BLOG» yozing — brendga yoziladigan tayyor xabar shablonini Direktga yuboraman")
+ "👇 Kommentga «+» yozing — brendga yoziladigan tayyor xabar shablonini Direktga yuboraman")
 
-PINNED = "«BLOG» deb yozing — brendga yoziladigan tayyor xabar shablonini Direktga yuboraman 💌\nBirinchi reklamangiz qanday o'tgan? 👇"
+PINNED = "«+» deb yozing — brendga yoziladigan tayyor xabar shablonini Direktga yuboraman 💌\nBirinchi reklamangiz qanday o'tgan? 👇"
 
 FUNNEL = [
- ("Триггер", "BLOG, Blog, blog, БЛОГ, Блог, блог. В ChatPlace — <b>точное совпадение</b> (комментарий целиком = слово): «blog» встречается в обычных комментариях."),
+ ("Триггер", "Комментарий «+». В ChatPlace — <b>точное совпадение</b> (комментарий целиком = «+»), чтобы не срабатывало на текст с плюсом."),
  ("Ответ ×3", "1) «Direktni tekshiring 💌» 2) «Yubordim ✨» 3) «Shablon Direktda 🤍»"),
  ("Карточка", "«Salom! 🤍 Va'da qilgan shablonni tayyorlab qo'ydim. Olish uchun tugmani bosing 👇» + кнопка «Olish 🎁»"),
  ("Подписка?", "Нет → «Shablonni faqat obunachilarimga yuboraman 🙈 @mukhlisasadikova_ ga obuna bo'ling va pastdagi tugmani bosing» + кнопка «Obuna bo'ldim ✅»"),
@@ -75,7 +75,7 @@ CHECK = [
  "Подтвердить: ollee.uz написал первым; ролик 16.08 был для ollee.",
  "Видео: снять дубль по тексту, наложить зелёный шаблон mx_birinchi_reklama_GREEN.mp4 (хромакей) или прислать дубль — смонтирую под него.",
  "Пост-бонус опубликован в Telegram-канале, ссылка вставлена в ChatPlace.",
- "ChatPlace: точное совпадение для «BLOG», проверка комментарием с чужого аккаунта.",
+ "ChatPlace: точное совпадение для «+», проверка комментарием с чужого аккаунта.",
  "После публикации — свой комментарий с кодом, закрепить. Через 48 ч: комментарии с кодом, подписки, переходы в Telegram.",
 ]
 
