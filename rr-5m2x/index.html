@@ -96,6 +96,14 @@ summary::before{content:"▸ "} details[open] summary::before{content:"▾ "}
 .breakdown dt{color:var(--mute)} .breakdown dd{margin:0}
 .transcript{margin-top:9px;font-size:13.5px;color:#2A323D;background:#F7F8FA;border-radius:10px;padding:10px 11px}
 .more{height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);font-weight:600;width:100%}
+.cmp{display:grid;grid-template-columns:minmax(0,1.3fr) repeat(3,minmax(0,1fr));border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:12.5px}
+.cmp div{padding:8px 9px;background:var(--card);border-bottom:1px solid var(--line)}
+.cmp .hd{background:#F4F6F9;color:var(--mute);font-size:11px;font-weight:600}
+.cmp .n{font:700 13px var(--f-num);letter-spacing:-.02em}
+.cmp .up{color:var(--good)} .cmp .dn{color:var(--hit)}
+.act{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.act h3{font-size:15px;font-weight:800;line-height:1.25}
+.act p{font-size:13.5px;color:#2A323D}
 .idea{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:13px 14px;display:flex;flex-direction:column;gap:8px}
 .idea h3{font-size:15.5px;font-weight:800;line-height:1.25;text-wrap:balance}
 .idea .im{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--mute)}
@@ -126,6 +134,7 @@ nav.tabs button[aria-current="page"]{background:var(--ink);color:#fff}
   <main id="view"></main>
 </div>
 <nav class="tabs" aria-label="Разделы"><div>
+  <button data-tab="me" style="display:none">Мой<b>аккаунт</b></button>
   <button data-tab="catalog">Каталог<b id="n-catalog"></b></button>
   <button data-tab="hits">Залёты<b id="n-hits"></b></button>
   <button data-tab="ideas">Идеи<b id="n-ideas"></b></button>
@@ -163,7 +172,9 @@ function initials(a){ var p = (a.name||a.nick).replace(/[^A-Za-zА-Яа-яЁё ]
 function ava(a, big){ return '<div class="ava'+(big?' big':'')+'" style="background:'+a.col+'">'+esc(initials(a))+'</div>'; }
 
 var S = { tab:'catalog', author:null, q:'', sort:'median', lang:'all', niche:'all', hq:'', hniche:'all', hlang:'all', hsort:'mult', onlySuper:false, hAuthor:null, hLimit:30, ideasMulti:true };
-var TABS = ['catalog','hits','ideas','insights'];
+var TABS = ['me','catalog','hits','ideas','insights'];
+if (D.me) S.tab = 'me';
+var BYID = {}; HITS.forEach(function(r){ BYID[r.id] = r; });
 function go(tab){ S.tab = tab; S.author = null; S.hLimit = 30; try{ history.replaceState(null,'','#'+tab); }catch(e){} render(); window.scrollTo(0,0); }
 function openAuthor(nick){ S.author = nick; render(); window.scrollTo(0,0); }
 function back(){ S.author = null; render(); }
@@ -196,6 +207,27 @@ function chips(items, cur, attr){
 }
 function countBy(list, key){ var m = {}; list.forEach(function(x){ var k = typeof key==='function'?key(x):x[key]; m[k] = (m[k]||0)+1; }); return m; }
 
+
+function vMe(){
+  var M = D.me, me = A[M.nick];
+  var fmt = {hit_rate:pct, views_per_follower:dec, per_month:dec, median_views:fnum, followers:fnum};
+  var rows = M.kpis.map(function(k){
+    var f = fmt[k.key]||dec, better = k.me != null && k.niche != null && k.me >= k.niche;
+    return '<div>'+esc(k.label)+'</div><div class="n '+(better?'up':'dn')+'">'+f(k.me)+'</div><div class="n">'+f(k.niche)+'</div><div class="n">'+(k.rank||'—')+' из '+k.of+'</div>';
+  }).join('');
+  var mx = Math.max.apply(null, (M.dur_rows||[]).map(function(r){ return r.rate; }).concat([0.01]));
+  var mine = M.hits.map(function(id){ return BYID[id]; }).filter(Boolean);
+  var fresh = M.fresh.map(function(id){ return BYID[id]; }).filter(Boolean);
+  return '<div><div class="eyebrow">Мой аккаунт · срез '+esc(D.snapshot)+'</div><h1>@'+esc(M.nick)+' против '+(D.authors.length-1)+' блогеров ниши</h1></div>'
+    + '<p class="lead">Сравнение с travel-, лайфстайл- и узбекскими блогерами из базы: '+D.total.toLocaleString('ru')+' рилсов. Зелёным — где ты лучше медианы ниши.</p>'
+    + '<div class="cmp"><div class="hd">Показатель</div><div class="hd">Ты</div><div class="hd">Медиана ниши</div><div class="hd">Место</div>'+rows+'</div>'
+    + '<h2>Что делать, по цифрам</h2><div class="list">'+M.acts.map(function(a,i){ return '<div class="act"><div class="eyebrow">'+(i?'Шаг '+i:'Главное')+'</div><h3>'+esc(a.t)+'</h3><p>'+esc(a.b)+'</p></div>'; }).join('')+'</div>'
+    + ((M.dur_rows||[]).length?'<div class="panel"><h2>Какая длина залетает у тебя</h2><p class="lead">Доля залётов среди твоих роликов такой длины.</p><div class="bars">'+M.dur_rows.map(function(h){ return barRow(h.k, h.n+' роликов', h.rate/mx, pct(h.rate), 'h'); }).join('')+'</div></div>':'')
+    + '<h2>Твои лучшие залёты</h2><div class="list">'+mine.map(function(r,i){ return reelCard(r, i+1, false); }).join('')+'</div>'
+    + '<h2>Свежие залёты соседей</h2><p class="lead">Самые сильные залёты из последних публикаций ниши. Берите идею и снимайте через свою историю.</p><div class="list">'+fresh.map(function(r,i){ return reelCard(r, i+1, true); }).join('')+'</div>'
+    + '<button class="more" data-allhits="'+esc(M.nick)+'">Все мои залёты</button>';
+}
+
 function vCatalog(){
   var niches = countBy(D.authors,'niche'), langs = countBy(D.authors,'lang');
   var q = S.q.trim().toLowerCase();
@@ -204,7 +236,7 @@ function vCatalog(){
   });
   var key = {median:'median_views', hit:'hit_rate', followers:'followers', freq:'per_month', vpf:'views_per_follower'}[S.sort];
   list.sort(function(x,y){ return (y[key]||0)-(x[key]||0); });
-  return '<div><div class="eyebrow">Каталог · срез '+esc(D.snapshot)+'</div><h1>Что залетает у конкурентов</h1></div>'
+  return '<div><div class="eyebrow">Каталог · срез '+esc(D.snapshot)+'</div><h1>'+(D.me?'Блогеры ниши':'Что залетает у конкурентов')+'</h1></div>'
     + '<p class="lead">Досье на каждого блогера и его лучшие рилсы. Залёт — рилс, который набрал в 2 раза больше медианы 30 соседних роликов того же автора. У каждого в базе от '+Math.min.apply(null,D.authors.map(function(a){return a.reels;}))+' до '+Math.max.apply(null,D.authors.map(function(a){return a.reels;}))+' последних рилсов.</p>'
     + '<div class="tiles"><div class="tile"><b>'+D.authors.length+'</b><span>блогеров в базе</span></div><div class="tile"><b>'+D.total.toLocaleString('ru')+'</b><span>рилсов в базе</span></div><div class="tile h"><b>'+HITS.length.toLocaleString('ru')+'</b><span>залётов ×2 и выше</span></div><div class="tile s"><b>'+D.supers+'</b><span>суперзалётов ×10</span></div></div>'
     + '<div class="controls"><div class="row"><input class="field" id="q" type="search" placeholder="Поиск: имя, ник" value="'+esc(S.q)+'" aria-label="Поиск блогера">'
@@ -294,8 +326,8 @@ function vInsights(){
 function render(){
   var sub = !!S.author;
   $('#bar').classList.toggle('sub', sub);
-  $('#brand').textContent = sub ? A[S.author].name : 'Разведка Reels';
-  view.innerHTML = sub ? vAuthor(S.author) : S.tab==='catalog' ? vCatalog() : S.tab==='hits' ? vHits() : S.tab==='ideas' ? vIdeas() : vInsights();
+  $('#brand').textContent = sub ? A[S.author].name : (D.me ? 'Разведка · @'+D.me.nick : 'Разведка Reels');
+  view.innerHTML = sub ? vAuthor(S.author) : S.tab==='me' ? vMe() : S.tab==='catalog' ? vCatalog() : S.tab==='hits' ? vHits() : S.tab==='ideas' ? vIdeas() : vInsights();
   document.querySelectorAll('nav.tabs button').forEach(function(b){ if(b.dataset.tab===S.tab) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current'); });
   if (TG) { try { sub ? TG.BackButton.show() : TG.BackButton.hide(); } catch(e){} }
 }
@@ -331,14 +363,16 @@ $('#demo').hidden = !D.demo;
 $('#n-catalog').textContent = D.authors.length;
 $('#n-hits').textContent = HITS.length.toLocaleString('ru');
 $('#n-ideas').textContent = IDEAS.length || '—';
-if (!IDEAS.length) { var ib = $('nav.tabs button[data-tab="ideas"]'); ib.style.display = 'none'; ib.parentNode.style.gridTemplateColumns = 'repeat(3,1fr)'; }
+if (!IDEAS.length) $('nav.tabs button[data-tab="ideas"]').style.display = 'none';
+if (D.me) $('nav.tabs button[data-tab="me"]').style.display = '';
+(function(){ var bs = [].filter.call(document.querySelectorAll('nav.tabs button'), function(b){ return b.style.display !== 'none'; }); $('nav.tabs div').style.gridTemplateColumns = 'repeat('+bs.length+',1fr)'; })();
 var TG = null;
 if (/github\.io$/.test(location.hostname) || /tgWebApp/.test(location.hash)) {
   var s = document.createElement('script'); s.src = 'https://telegram.org/js/telegram-web-app.js';
   s.onload = function(){ try { TG = window.Telegram.WebApp; TG.ready(); TG.expand(); TG.BackButton.onClick(back); if(TG.setHeaderColor) TG.setHeaderColor('#EDF0F4'); } catch(e){ TG = null; } render(); };
   document.head.appendChild(s);
 }
-var h0 = location.hash.slice(1); if(TABS.indexOf(h0)>=0) S.tab = h0;
+var h0 = location.hash.slice(1); if(TABS.indexOf(h0)>=0 && (h0!=='me'||D.me)) S.tab = h0;
 render();
 })();
 
